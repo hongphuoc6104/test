@@ -1,0 +1,12 @@
+[build-system]
+requires = []
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "face-search"
+version = "0.1.0"
+description = "Face search utilities"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
