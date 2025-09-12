@@ -9,7 +9,7 @@ env/
 Data/
 models/
 warehouse/
-test/
+
 
 # Data & models (không đưa dữ liệu & weight nặng lên git)
 *.h5
