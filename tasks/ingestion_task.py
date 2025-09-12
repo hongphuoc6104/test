@@ -3,6 +3,7 @@ import os
 import json
 from glob import glob  # (CẢI TIẾN) Thư viện để tìm file theo mẫu
 from prefect import task
+from utils.config_loader import load_config
 
 
 def extract_frames(video_path, root_output_folder):
@@ -54,9 +55,7 @@ def ingestion_task():
     """
     Hàm chính để điều khiển toàn bộ quá trình xử lý hàng loạt.
     """
-    import yaml
-    with open("configs/config.yaml", 'r') as f:
-        cfg = yaml.safe_load(f)
+    cfg = load_config()
 
     video_folder = cfg['storage']['video_root']
     frames_folder = cfg['storage']['frames_root']
