@@ -1,0 +1,70 @@
+seed: 42
+
+storage:
+  video_root: "Data/video"
+  frames_root: "Data/frames"
+  metadata_json: "Data/metadata.json"
+  embeddings_folder_per_movie: "Data/embeddings"
+
+
+  warehouse_embeddings: "warehouse/parquet/embeddings.parquet"
+  warehouse_embeddings_pca: "warehouse/parquet/embeddings_pca.parquet"
+  warehouse_clusters: "warehouse/parquet/clusters.parquet"
+  warehouse_noise: "warehouse/parquet/noise.parquet"
+  clusters_merged_parquet: "warehouse/parquet/clusters_merged.parquet"
+
+  characters_json: "warehouse/characters.json"
+  pca_model: "models/pca_model.joblib"
+  index_path: "models/character_index.faiss"
+  index_map: "models/character_index_map.json"
+
+embedding:
+  model: "buffalo_l"
+  l2_normalize: true
+  providers: ["CUDAExecutionProvider"]
+
+pca:
+  enable: true
+  n_components: 128
+  whiten: true
+
+clustering:
+  algo: "agglomerative"
+  distance_threshold: 0.95
+  metric: "cosine"
+  linkage: "average"
+
+
+post_merge:
+  enable: true
+  distance_threshold: 1.0
+  metric: "cosine"
+  linkage: "average"
+
+quality_filters:
+  enable: true
+  min_det_score: 0.5
+  min_face_ratio: 0.005
+  min_blur_clarity: 70.0
+  brightness:
+    enable: true
+    value_range: [30, 230]
+  contrast:
+    enable: true
+    min_value: 25.0
+
+
+centroid:
+  method: "trimmed_mean"
+  trim_ratio: 0.1
+
+index:
+  type: "flat_ip"
+
+search:
+  knn: 1
+  noise_knn: 50
+  noise_cosine_floor: 0.45
+
+logging:
+  mlflow_experiment: "face_discovery_mvp"

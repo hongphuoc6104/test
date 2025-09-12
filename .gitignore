@@ -1,0 +1,39 @@
+# Virtual environment
+.venv/
+env/
+*.egg-info/
+
+# IDE / Editors
+.idea/
+.vscode/
+Data/
+models/
+warehouse/
+test/
+
+# Data & models (không đưa dữ liệu & weight nặng lên git)
+*.h5
+*.pt
+*.ckpt
+*.onnx
+*.npz
+*.joblib
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs & debug
+*.log
+logs/
+debug/
+
+# System files
+.DS_Store
+Thumbs.db
+
