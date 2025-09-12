@@ -65,6 +65,7 @@ def test_embedding_and_search(tmp_path, monkeypatch):
         "metadata_json": str(tmp_path / "metadata.json"),
         "embeddings_folder_per_movie": str(tmp_path / "embeddings"),
         "characters_json": str(tmp_path / "characters.json"),
+        "face_crops_root": str(tmp_path / "face_crops"),
     }
     quality_filters = {
         "min_det_score": 0.0,

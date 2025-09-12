@@ -18,14 +18,16 @@ def build_warehouse_task():
 
     # 2. Đọc metadata.json
     if not os.path.exists(metadata_json_path):
-        raise FileNotFoundError(f"Không tìm thấy file metadata.json: {metadata_json_path}")
+        raise FileNotFoundError(
+            f"Không tìm thấy file metadata.json: {metadata_json_path}"
+        )
 
     with open(metadata_json_path, "r", encoding="utf-8") as f:
         metadata = json.load(f)
 
     print("Bắt đầu gom các file Parquet vào warehouse...")
 
-    embedding_files = []
+    embedding_files: list[tuple[str, str]] = []
     for movie, info in metadata.items():
         embedding_path = info.get("embedding_file_path")
 
@@ -40,3 +42,18 @@ def build_warehouse_task():
     first_movie, first_path = embedding_files[0]
     first_table = pq.read_table(first_path)
     schema = first_table.schema
+
+    # 3. Ghi các bảng vào file warehouse sử dụng ParquetWriter
+    with pq.ParquetWriter(warehouse_path, schema) as writer:
+        # Ghi bảng đầu tiên
+        writer.write_table(first_table)
+
+        # Ghi các bảng còn lại
+        for movie, path in embedding_files[1:]:
+            table = pq.read_table(path)
+            if table.schema != schema:
+                table = table.cast(schema)
+            writer.write_table(table)
+
+    print(f"Đã gom {len(embedding_files)} file vào {warehouse_path}")
+    return warehouse_path
