@@ -11,14 +11,7 @@ from insightface.app import FaceAnalysis
 
 from utils.config_loader import load_config
 from utils.indexer import load_index
-
-
-def l2_normalize(v: np.ndarray) -> np.ndarray:
-    """Normalize a vector using the L2 norm."""
-    norm = np.linalg.norm(v)
-    if norm == 0:
-        return v
-    return v / norm
+from utils.vector_utils import l2_normalize
 
 
 def _query_index(index: Any, emb: np.ndarray, k: int) -> tuple[np.ndarray, np.ndarray]:

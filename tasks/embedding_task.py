@@ -10,19 +10,13 @@ from prefect import task
 from insightface.app import FaceAnalysis
 from utils.config_loader import load_config
 from utils.image_utils import calculate_blur_score, check_brightness, check_contrast
+from utils.vector_utils import l2_normalize
 
 
 # --- Các hàm tiện ích ---
 def make_global_id(movie: str, frame: str, bbox: np.ndarray) -> str:
     s = f"{movie}|{frame}|{int(bbox[0])}|{int(bbox[1])}|{int(bbox[2])}|{int(bbox[3])}"
     return hashlib.sha1(s.encode("utf-8")).hexdigest()
-
-
-def l2_normalize(v: np.ndarray) -> np.ndarray:
-    norm = np.linalg.norm(v)
-    if norm == 0:
-        return v
-    return v / norm
 
 
 # --- Hàm xử lý từng phim ---

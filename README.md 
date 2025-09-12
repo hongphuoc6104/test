@@ -1,0 +1,9 @@
+# Face Search
+
+## Installation
+
+Install the project in editable mode:
+
+```bash
+pip install -e .
+```

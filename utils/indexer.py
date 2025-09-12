@@ -11,14 +11,7 @@ import numpy as np
 import pandas as pd
 
 from utils.config_loader import load_config
-
-
-def _mean_vector(vectors: List[np.ndarray]) -> np.ndarray:
-    """Tính vector trung bình từ danh sách vector."""
-    if len(vectors) == 1:
-        return vectors[0]
-    arr = np.stack(vectors)
-    return arr.mean(axis=0)
+from utils.vector_utils import _mean_vector
 
 
 def build_index(characters_json: str, index_path: str) -> None:

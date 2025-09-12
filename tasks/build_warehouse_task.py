@@ -1,7 +1,5 @@
 import os
 import json
-import pandas as pd
-import pyarrow as pa
 import pyarrow.parquet as pq
 from prefect import task
 from utils.config_loader import load_config
@@ -27,32 +25,38 @@ def build_warehouse_task():
 
     with open(metadata_json_path, "r", encoding="utf-8") as f:
         metadata = json.load(f)
-    writer = None
-    schema = None
-    total_rows = 0
+
     print("Bắt đầu gom các file Parquet vào warehouse...")
 
+    embedding_files = []
     for movie, info in metadata.items():
         embedding_path = info.get("embedding_file_path")
 
         if embedding_path and os.path.exists(embedding_path):
-            print(f"  -> Đang xử lý: {movie}")
-            table = pq.read_table(embedding_path)
-
-            if writer is None:
-                schema = table.schema
-                writer = pq.ParquetWriter(warehouse_path, schema)
-            writer.write_table(table)
-            total_rows += len(table)
-
+            embedding_files.append((movie, embedding_path))
         else:
             print(f"[WARN] Không tìm thấy embeddings cho {movie} tại {embedding_path}")
 
-    if writer:
-        writer.close()
-        print(f"\n[INFO] Warehouse embeddings ({total_rows} records) được lưu tại: {warehouse_path}")
-    else:
+    if not embedding_files:
         raise RuntimeError("Không có dữ liệu nào để gom. Hãy chạy embedding_task trước.")
+
+    first_movie, first_path = embedding_files[0]
+    first_table = pq.read_table(first_path)
+    schema = first_table.schema
+    total_rows = 0
+
+    with pq.ParquetWriter(warehouse_path, schema) as writer:
+        print(f"  -> Đang xử lý: {first_movie}")
+        writer.write_table(first_table)
+        total_rows += len(first_table)
+
+        for movie, path in embedding_files[1:]:
+            print(f"  -> Đang xử lý: {movie}")
+            table = pq.read_table(path)
+            writer.write_table(table)
+            total_rows += len(table)
+
+    print(f"\n[INFO] Warehouse embeddings ({total_rows} records) được lưu tại: {warehouse_path}")
 
     return True
 

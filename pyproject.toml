@@ -1,5 +1,4 @@
 [build-system]
-requires = []
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,4 +8,3 @@ description = "Face search utilities"
 dependencies = []
 
 [tool.setuptools.packages.find]
-where = ["."]

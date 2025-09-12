@@ -6,15 +6,7 @@ from sklearn.cluster import AgglomerativeClustering
 from prefect import task
 from utils.config_loader import load_config
 from utils.indexer import build_index
-
-
-def _mean_vector(vectors):
-    """Tính vector trung bình từ một list các vector."""
-    # Đảm bảo stack hoạt động ngay cả khi chỉ có 1 vector
-    if len(vectors) == 1:
-        return vectors[0]
-    arr = np.stack(vectors)
-    return arr.mean(axis=0)
+from utils.vector_utils import _mean_vector
 
 
 @task(name="Build Character Profiles Task")

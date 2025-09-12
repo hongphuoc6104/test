@@ -15,7 +15,7 @@ storage:
 
   characters_json: "warehouse/characters.json"
   pca_model: "models/pca_model.joblib"
-  faiss_index: "models/character_index.faiss"
+  index_path: "models/character_index.faiss"
   index_map: "models/character_index_map.json"
 
 embedding:
