@@ -13,11 +13,8 @@ def build_warehouse_task():
     # 1. Đọc config
     config = load_config()
     metadata_json_path = config["storage"]["metadata_json"]
-    warehouse_path = config["storage"].get("embeddings_parquet") or config["storage"]["warehouse_embeddings"]
-    embeddings_parquet = config["storage"]["warehouse_embeddings"]
-
-    # Tạo thư mục warehouse/parquet nếu chưa có
-    os.makedirs(os.path.dirname(embeddings_parquet), exist_ok=True)
+    warehouse_path = config["storage"]["warehouse_embeddings"]
+    os.makedirs(os.path.dirname(warehouse_path), exist_ok=True)
 
     # 2. Đọc metadata.json
     if not os.path.exists(metadata_json_path):
@@ -43,22 +40,3 @@ def build_warehouse_task():
     first_movie, first_path = embedding_files[0]
     first_table = pq.read_table(first_path)
     schema = first_table.schema
-    total_rows = 0
-
-    with pq.ParquetWriter(warehouse_path, schema) as writer:
-        print(f"  -> Đang xử lý: {first_movie}")
-        writer.write_table(first_table)
-        total_rows += len(first_table)
-
-        for movie, path in embedding_files[1:]:
-            print(f"  -> Đang xử lý: {movie}")
-            table = pq.read_table(path)
-            writer.write_table(table)
-            total_rows += len(table)
-
-    print(f"\n[INFO] Warehouse embeddings ({total_rows} records) được lưu tại: {warehouse_path}")
-
-    return True
-
-if __name__ == "__main__":
-    build_warehouse_task()
