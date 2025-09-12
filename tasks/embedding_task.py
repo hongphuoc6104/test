@@ -36,6 +36,11 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
     movie_specific_rows = []
     q_filters = config.get("quality_filters", {})
 
+    storage_cfg = config["storage"]
+    face_crops_root = storage_cfg["face_crops_root"]
+    movie_face_crop_dir = os.path.join(face_crops_root, movie_name)
+    os.makedirs(movie_face_crop_dir, exist_ok=True)
+
     for img_path in tqdm(image_files, desc=f"Scanning {movie_name}"):
         try:
             img = cv2.imread(img_path)
@@ -98,17 +103,26 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
                     continue
 
                 original_bbox = np.round(face.bbox / scale).astype(np.int32)
+                face_crop = img[original_bbox[1]:original_bbox[3], original_bbox[0]:original_bbox[2]]
+                if face_crop.size == 0:
+                    continue
+
+                global_id = make_global_id(movie_name, os.path.basename(img_path), original_bbox)
+                crop_path = os.path.join(movie_face_crop_dir, f"{global_id}.jpg")
+                cv2.imwrite(crop_path, face_crop)
+
                 emb = face.embedding
                 if config['embedding'].get('l2_normalize', True):
                     emb = l2_normalize(emb)
 
                 row = {
-                    "global_id": make_global_id(movie_name, os.path.basename(img_path), original_bbox),
+                    "global_id": global_id,
                     "movie": movie_name,
                     "frame": os.path.basename(img_path),
                     "bbox": original_bbox.tolist(),
                     "det_score": float(face.det_score),
                     "emb": emb.tolist(),
+                    "face_crop_path": crop_path,
                     "ts_created": int(time.time()),
                     "version": 1
                 }
@@ -121,7 +135,7 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
     return movie_specific_rows
 
 
-# --- Task chính ---
+# --- Task chnh ---
 @task(name="Embedding Task")
 def embedding_task():
     cfg = load_config()

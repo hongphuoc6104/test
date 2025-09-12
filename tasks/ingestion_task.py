@@ -3,6 +3,7 @@ import os
 import json
 from glob import glob  # (CẢI TIẾN) Thư viện để tìm file theo mẫu
 from prefect import task
+from utils.config_loader import load_config
 
 
 def extract_frames(video_path, root_output_folder):
@@ -40,38 +41,41 @@ def extract_frames(video_path, root_output_folder):
             break
 
         if frame_count % frame_interval == 0:
-            frame_filename = os.path.join(output_folder_for_movie, f"frame_{saved_frame_count:07d}.jpg")
+            frame_filename = os.path.join(
+                output_folder_for_movie, f"frame_{saved_frame_count:07d}.jpg"
+            )
             cv.imwrite(frame_filename, frame)
             saved_frame_count += 1
         frame_count += 1
 
     cap.release()
-    print(f"-> Hoàn tất! Đã lưu {saved_frame_count} khung hình tại '{output_folder_for_movie}'")
+    print(
+        f"-> Hoàn tất! Đã lưu {saved_frame_count} khung hình tại '{output_folder_for_movie}'"
+    )
     return video_name, video_metadata
+
 
 @task
 def ingestion_task():
     """
     Hàm chính để điều khiển toàn bộ quá trình xử lý hàng loạt.
     """
-    import yaml
-    with open("configs/config.yaml", 'r') as f:
-        cfg = yaml.safe_load(f)
+    cfg = load_config()
 
-    video_folder = cfg['storage']['video_root']
-    frames_folder = cfg['storage']['frames_root']
-    metadata_filepath = cfg['storage']['metadata_json']
+    video_folder = cfg["storage"]["video_root"]
+    frames_folder = cfg["storage"]["frames_root"]
+    metadata_filepath = cfg["storage"]["metadata_json"]
 
     # --- (CẢI TIẾN) Tải metadata hiện có để kiểm tra ---
     try:
-        with open(metadata_filepath, 'r', encoding='utf-8') as f:
+        with open(metadata_filepath, "r", encoding="utf-8") as f:
             all_metadata = json.load(f)
     except FileNotFoundError:
         all_metadata = {}
 
     # --- (CẢI TIẾN) Tìm tất cả các file video trong thư mục ---
     # Tìm tất cả các file có đuôi .mp4,
-    video_paths = glob(os.path.join(video_folder, '*.[mM][pP]4'))
+    video_paths = glob(os.path.join(video_folder, "*.[mM][pP]4"))
 
     if not video_paths:
         print(f"Không tìm thấy video nào trong thư mục '{video_folder}'")
@@ -102,7 +106,6 @@ def ingestion_task():
                 cap.release()
             continue
 
-
         new_videos_processed = True
         result = extract_frames(video_path, frames_folder)
         if result and result[0] is not None:
@@ -111,12 +114,12 @@ def ingestion_task():
 
     # --- (CẢI TIẾN) Chỉ ghi lại file metadata nếu có thay đổi ---
     if new_videos_processed:
-        with open(metadata_filepath, 'w', encoding='utf-8') as f:
+        with open(metadata_filepath, "w", encoding="utf-8") as f:
             json.dump(all_metadata, f, indent=4, ensure_ascii=False)
         print(f"\n✅ Đã cập nhật thành công file metadata tại '{metadata_filepath}'")
     else:
         print("\nKhông có video mới nào để xử lý.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     ingestion_task()

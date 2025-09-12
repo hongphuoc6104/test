@@ -46,7 +46,7 @@ def cluster_task():
 
     # Giữ lại TẤT CẢ các cột khi lưu kết quả
     clusters_df = df.copy()
-    noise_df = pd.DataFrame(columns=df.columns) # Tạo DataFrame rỗng với đúng các cột
+
 
     # Logic thống kê
     n_clusters = len(set(labels))
@@ -59,9 +59,9 @@ def cluster_task():
 
     # Lưu kết quả
     clusters_path = storage_cfg["warehouse_clusters"]
-    noise_path = storage_cfg["warehouse_noise"]
+
     clusters_df.to_parquet(clusters_path, index=False)
-    noise_df.to_parquet(noise_path, index=False)
+
 
     print(f"\n[INFO] Đã lưu {len(clusters_df)} cluster records -> {clusters_path}")
-    return clusters_path, noise_path
+    return clusters_path

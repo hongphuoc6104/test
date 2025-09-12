@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.cluster import AgglomerativeClustering
 from prefect import task
 from utils.config_loader import load_config
+from utils.indexer import build_index
 
 
 def _mean_vector(vectors):
@@ -74,7 +75,8 @@ def character_task():
     print("[Character] Building final character profiles...")
     characters = {}
     for char_id, group in df.groupby("final_character_id"):
-        if pd.isna(char_id): continue
+        if pd.isna(char_id):
+            continue
 
         rep = group.loc[group["det_score"].idxmax()]
 
@@ -94,5 +96,10 @@ def character_task():
         json.dump(characters, f, indent=2, ensure_ascii=False)
 
     print(f"[Character] Saved {len(characters)} character profiles to {output_json_path}")
+    # Xây dựng index cho các nhân vật
+    index_path = storage_cfg.get("index_path")
+    if index_path:
+        print(f"[Character] Building index at {index_path}...")
+        build_index(output_json_path, index_path)
     print("[Character] Task completed successfully ✅")
     return output_json_path

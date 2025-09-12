@@ -5,7 +5,7 @@ storage:
   frames_root: "Data/frames"
   metadata_json: "Data/metadata.json"
   embeddings_folder_per_movie: "Data/embeddings"
-
+  face_crops_root: "Data/face_crops"
 
   warehouse_embeddings: "warehouse/parquet/embeddings.parquet"
   warehouse_embeddings_pca: "warehouse/parquet/embeddings_pca.parquet"
@@ -15,7 +15,7 @@ storage:
 
   characters_json: "warehouse/characters.json"
   pca_model: "models/pca_model.joblib"
-  index_path: "models/character_index.faiss"
+  faiss_index: "models/character_index.faiss"
   index_map: "models/character_index_map.json"
 
 embedding:
@@ -34,7 +34,6 @@ clustering:
   metric: "cosine"
   linkage: "average"
 
-
 post_merge:
   enable: true
   distance_threshold: 1.0
@@ -52,7 +51,6 @@ quality_filters:
   contrast:
     enable: true
     min_value: 25.0
-
 
 centroid:
   method: "trimmed_mean"
