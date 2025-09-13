@@ -1,11 +1,13 @@
-
-import pandas as pd
-import numpy as np
-from sklearn.decomposition import PCA
-import joblib
-from prefect import task
-from utils.config_loader import load_config  # giả sử bạn đã có sẵn
 import os
+
+import joblib
+import numpy as np
+import pandas as pd
+from prefect import task
+from sklearn.decomposition import PCA
+
+from utils.config_loader import load_config  # giả sử bạn đã có sẵn
+from utils.vector_utils import l2_normalize
 
 @task
 def pca_task():
@@ -30,10 +32,14 @@ def pca_task():
     # 2. Load embeddings
     df = pd.read_parquet(embeddings_path, engine="pyarrow")
 
-    if "emb" not in df.columns or "global_id" not in df.columns:
-        raise ValueError("[PCA] Input parquet must contain 'global_id' and 'emb' columns.")
+    required_cols = {"emb", "global_id", "track_centroid"}
+    if not required_cols.issubset(df.columns):
+        raise ValueError(
+            "[PCA] Input parquet must contain columns: 'global_id', 'emb', and 'track_centroid'."
+        )
 
     X = np.array(df["emb"].tolist())  # shape: (N, D)
+    C = np.array(df["track_centroid"].tolist())  # shape: (N, D)
     print(f"[PCA] Loaded {X.shape[0]} embeddings with dimension {X.shape[1]}.")
 
     # 3. Fit PCA
@@ -49,18 +55,24 @@ def pca_task():
     joblib.dump(pca_model, pca_model_path)
     print(f"[PCA] PCA model saved to {pca_model_path}")
 
-    # 5. Transform embeddings
+    # 5. Transform embeddings and centroids
     X_pca = pca_model.transform(X)
+    C_pca = pca_model.transform(C)
     print(f"[PCA] Transformed embeddings shape: {X_pca.shape}")
 
-    # 6. Save reduced embeddings
+    # 6. L2-normalize transformed vectors
+    X_pca = np.array([l2_normalize(v) for v in X_pca])
+    C_pca = np.array([l2_normalize(v) for v in C_pca])
+
+    # 7. Save reduced embeddings
     print("[PCA] Creating new DataFrame with reduced embeddings...")
 
-    # (FIX) Copy DataFrame gốc để giữ lại tất cả metadata, và xóa cột 'emb' cũ
-    df_pca = df.drop(columns=['emb']).copy()
+    # Copy DataFrame gốc để giữ lại tất cả metadata, và xóa các cột vector cũ
+    df_pca = df.drop(columns=["emb", "track_centroid"]).copy()
 
-    # Gán lại cột 'emb' bằng dữ liệu đã được giảm chiều
-    df_pca['emb'] = X_pca.tolist()
+    # Gán lại các cột bằng dữ liệu đã được giảm chiều và chuẩn hóa
+    df_pca["emb"] = X_pca.tolist()
+    df_pca["track_centroid"] = C_pca.tolist()
 
     os.makedirs(os.path.dirname(embeddings_pca_path), exist_ok=True)
     df_pca.to_parquet(embeddings_pca_path, index=False)
