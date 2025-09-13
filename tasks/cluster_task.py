@@ -8,14 +8,16 @@ from utils.config_loader import load_config
 @task(name="Cluster Faces Task")
 def cluster_task():
     """
-    Gom cụm embeddings bằng Agglomerative Clustering và bảo toàn metadata.
+    Gom cụm embeddings bằng thuật toán được cấu hình và bảo toàn metadata.
     """
-    print("\n--- Starting Cluster Task (Agglomerative) ---")
 
     config = load_config()
     storage_cfg = config["storage"]
     clustering_cfg = config["clustering"]
+    algo = clustering_cfg.get("algo", "agglomerative").lower()
     pca_cfg = config.get("pca", {})
+
+    print(f"\n--- Starting Cluster Task ({algo.capitalize()}) ---")
 
     # Logic chọn file input một cách thông minh
     if pca_cfg.get("enable", False):
@@ -48,19 +50,32 @@ def cluster_task():
     # Gom cụm theo từng phim
     results = []
     for movie_key, group in df_tracks.groupby(group_col):
-        print(f"Running Agglomerative Clustering for {group_col}={movie_key}...")
+        print(
+            f"Running {algo.capitalize()} Clustering for {group_col}={movie_key}..."
+        )
         emb_matrix = np.array(group["track_centroid"].tolist(), dtype=np.float32)
 
         if len(group) > 1:
-            clusterer = AgglomerativeClustering(
-                n_clusters=None,
-                distance_threshold=float(
-                    clustering_cfg.get("distance_threshold", 0.7)
-                ),
-                metric="cosine",
-                linkage="complete",
-            )
-            labels = clusterer.fit_predict(emb_matrix)
+            if algo == "hdbscan":
+                import hdbscan
+
+                clusterer = hdbscan.HDBSCAN(
+                    min_cluster_size=int(
+                        clustering_cfg.get("min_cluster_size", 5)
+                    ),
+                    metric=clustering_cfg.get("metric", "euclidean"),
+                )
+                labels = clusterer.fit_predict(emb_matrix)
+            else:
+                clusterer = AgglomerativeClustering(
+                    n_clusters=None,
+                    distance_threshold=float(
+                        clustering_cfg.get("distance_threshold", 0.7)
+                    ),
+                    metric="cosine",
+                    linkage="complete",
+                )
+                labels = clusterer.fit_predict(emb_matrix)
         else:
             labels = np.array([0])
 
