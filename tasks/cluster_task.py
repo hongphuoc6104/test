@@ -13,7 +13,6 @@ def cluster_task():
     print("\n--- Starting Cluster Task (Agglomerative) ---")
 
     config = load_config()
-    # (FIX) Đọc tất cả các đường dẫn từ mục "storage" duy nhất
     storage_cfg = config["storage"]
     clustering_cfg = config["clustering"]
     pca_cfg = config.get("pca", {})

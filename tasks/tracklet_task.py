@@ -36,7 +36,9 @@ def _cosine_sim(v1: np.ndarray, v2: np.ndarray) -> float:
     return float(np.dot(v1, v2) / denom)
 
 
-def link_tracklets(df: pd.DataFrame, iou_threshold: float = 0.3, cos_threshold: float = 0.6) -> pd.DataFrame:
+def link_tracklets(
+    df: pd.DataFrame, iou_threshold: float = 0.3, cos_threshold: float = 0.6
+) -> pd.DataFrame:
     """Link consecutive detections into tracklets using IoU and cosine similarity."""
     if df.empty:
         return df
@@ -60,7 +62,10 @@ def link_tracklets(df: pd.DataFrame, iou_threshold: float = 0.3, cos_threshold: 
             # only consider tracks from previous frame
             if track["last_frame"] != frame_idx - 1:
                 continue
-            if _iou(bbox, track["bbox"]) >= iou_threshold and _cosine_sim(emb, track["emb"]) >= cos_threshold:
+            if (
+                _iou(bbox, track["bbox"]) >= iou_threshold
+                and _cosine_sim(emb, track["emb"]) >= cos_threshold
+            ):
                 matched_track = track
                 break
 
@@ -86,6 +91,8 @@ def link_tracklets(df: pd.DataFrame, iou_threshold: float = 0.3, cos_threshold: 
 
 
 @task(name="Tracklet Task")
-def tracklet_task(df: pd.DataFrame, iou_threshold: float = 0.3, cos_threshold: float = 0.6) -> pd.DataFrame:
+def tracklet_task(
+    df: pd.DataFrame, iou_threshold: float = 0.3, cos_threshold: float = 0.6
+) -> pd.DataFrame:
     """Prefect wrapper around :func:`link_tracklets`."""
     return link_tracklets(df, iou_threshold, cos_threshold)
