@@ -30,29 +30,30 @@ def cluster_task():
     if "track_centroid" not in df.columns:
         raise ValueError("[Cluster] Input parquet must contain column: track_centroid")
 
-    movie_col = "movie_id" if "movie_id" in df.columns else "movie"
-    if movie_col not in df.columns:
+    if "movie_id" not in df.columns:
         print(
-            "[WARN] movie identifier column not found. Treating entire dataset as one movie.",
+            "[WARN] movie_id column not found. Treating entire dataset as one movie.",
         )
-        df[movie_col] = 0
+        df["movie_id"] = 0
 
-    df_tracks = df.drop_duplicates(subset=[movie_col, "track_id"])
+    df_tracks = df.drop_duplicates(subset=["movie_id", "track_id"])
 
     print(f"[INFO] Đã load {len(df_tracks)} track centroids để gom cụm.")
 
     # Gom cụm theo từng phim
     results = []
-    for movie_id, group in df_tracks.groupby(movie_col):
-        print(f"Running Agglomerative Clustering for {movie_col}={movie_id}...")
+    for movie_id, group in df_tracks.groupby("movie_id"):
+        print(f"Running Agglomerative Clustering for movie_id={movie_id}...")
         emb_matrix = np.array(group["track_centroid"].tolist(), dtype=np.float32)
 
         if len(group) > 1:
             clusterer = AgglomerativeClustering(
                 n_clusters=None,
-                distance_threshold=clustering_cfg["distance_threshold"],
-                metric=clustering_cfg["metric"],
-                linkage=clustering_cfg["linkage"],
+                distance_threshold=float(
+                    clustering_cfg.get("distance_threshold", 0.7)
+                ),
+                metric="cosine",
+                linkage="complete",
             )
             labels = clusterer.fit_predict(emb_matrix)
         else:
