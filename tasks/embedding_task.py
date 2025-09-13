@@ -191,11 +191,17 @@ def embedding_task():
             df_movie = link_tracklets(df_movie)
             centroids = (
                 df_movie.groupby("track_id")["emb"]
-                .apply(lambda e: np.median(np.stack(e.to_list()), axis=0))
+                .apply(
+                    lambda e: l2_normalize(
+                        np.median(np.stack(e.to_list()), axis=0)
+                    )
+                )
                 .rename("track_centroid")
             )
             df_movie = df_movie.merge(centroids, on="track_id")
-            df_movie["track_centroid"] = df_movie["track_centroid"].apply(lambda x: x.tolist())
+            df_movie["track_centroid"] = df_movie["track_centroid"].apply(
+                lambda x: x.tolist()
+            )
             df_movie.to_parquet(expected_parquet_path, index=False)
             new_data_generated = True
             if movie_name not in all_metadata:
@@ -224,17 +230,25 @@ def embedding_task():
         # Liên kết các khuôn mặt liên tiếp thành tracklet và gán track_id
         df_movie = link_tracklets(df_movie)
 
-        # Tính track_centroid cho từng track bằng median
+        # Tính track_centroid cho từng track bằng median và chuẩn hóa L2
         centroids = (
             df_movie.groupby("track_id")["emb"]
-            .apply(lambda e: np.median(np.stack(e.to_list()), axis=0))
+            .apply(
+                lambda e: l2_normalize(
+                    np.median(np.stack(e.to_list()), axis=0)
+                )
+            )
             .rename("track_centroid")
         )
         df_movie = df_movie.merge(centroids, on="track_id")
-        df_movie["track_centroid"] = df_movie["track_centroid"].apply(lambda x: x.tolist())
+        df_movie["track_centroid"] = df_movie["track_centroid"].apply(
+            lambda x: x.tolist()
+        )
 
         df_movie.to_parquet(expected_parquet_path, index=False)
-        print(f"✅ Đã lưu {len(movie_rows)} embeddings cho phim '{movie_name}' tại: {expected_parquet_path}")
+        print(
+            f"✅ Đã lưu {len(movie_rows)} embeddings cho phim '{movie_name}' tại: {expected_parquet_path}"
+        )
 
         all_metadata[movie_name]["num_faces_detected"] = len(movie_rows)
         all_metadata[movie_name]["embedding_file_path"] = expected_parquet_path
