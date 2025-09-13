@@ -17,6 +17,7 @@ def main():
     default_sim_threshold = search_cfg.get("sim_threshold", 0.5)
     default_margin_threshold = search_cfg.get("margin_threshold", 0.05)
     default_top_k = max(2, search_cfg.get("knn", 5))
+    default_min_count = search_cfg.get("min_count", 0)
     pca_model_path = storage_cfg.get("pca_model", "models/pca_model.joblib")
 
     parser = argparse.ArgumentParser(description="Search actor by face image")
@@ -39,6 +40,12 @@ def main():
         default=default_top_k,
         help="Number of top matches to retrieve (default from config)",
     )
+    parser.add_argument(
+        "--min-count",
+        type=int,
+        default=default_min_count,
+        help="Minimum occurrence count for characters (default from config)",
+    )
     args = parser.parse_args()
 
     # --- Get embedding and search function ---
@@ -57,7 +64,7 @@ def main():
 
     # --- Search bằng embedding đã được PCA ---
     top_k = max(2, args.top_k)
-    matches = results["search_func"](emb, top_k=top_k)  # search_func được trả về từ search_actor
+    matches = results["search_func"](emb, top_k=top_k, min_count=args.min_count)  # search_func được trả về từ search_actor
 
     if not matches:
         print("No matching actors found.")

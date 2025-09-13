@@ -46,7 +46,6 @@ filter_clusters:
   min_det: 0.6
   min_frames: 5
 
-
 quality_filters:
   enable: true
   min_det_score: 0.5
@@ -66,12 +65,13 @@ centroid:
 index:
   type: "flat_ip"
 
-search:
-  knn: 1
-  noise_knn: 50
-  noise_cosine_floor: 0.45
-  sim_threshold: 0.5
-  margin_threshold: 0.05
+  search:
+    knn: 1
+    noise_knn: 50
+    noise_cosine_floor: 0.45
+    sim_threshold: 0.5
+    margin_threshold: 0.05
+    min_count: 3
 
 logging:
   mlflow_experiment: "face_discovery_mvp"

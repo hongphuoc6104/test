@@ -30,6 +30,7 @@ def _query_index(index: Any, emb: np.ndarray, k: int) -> tuple[np.ndarray, np.nd
 def search_actor(
     image_path: str,
     k: int = 5,
+    min_count: int = 0,
     return_emb: bool = False,
 ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
     """Find the closest characters in the index based on an image.
@@ -80,7 +81,10 @@ def search_actor(
     emb = np.asarray([emb], dtype="float32")
     with open(storage_cfg["characters_json"], "r", encoding="utf-8") as f:
         characters = json.load(f)
-    def _search_func(query_emb: np.ndarray, top_k: int = k) -> List[Dict[str, Any]]:
+
+    def _search_func(
+        query_emb: np.ndarray, top_k: int = k, min_count: int = min_count
+    ) -> List[Dict[str, Any]]:
         """Search the loaded index using the provided embedding."""
         q = np.asarray(query_emb, dtype="float32")
         if q.ndim == 1:
@@ -89,12 +93,17 @@ def search_actor(
         results: List[Dict[str, Any]] = []
         for dist, idx in zip(distances, indices):
             char_id = str(id_map.get(int(idx), idx))
-            movies = characters.get(char_id, {}).get("movies", [])
+            char_info = characters.get(char_id, {})
+            movies = char_info.get("movies", [])
+            count = char_info.get("count", 0)
+            if count < min_count:
+                continue
             results.append(
                 {
                     "character_id": char_id,
                     "movies": movies,
                     "distance": float(dist),
+                    "count": count,
                 }
             )
         return results
@@ -105,4 +114,4 @@ def search_actor(
             "search_func": _search_func,
         }
 
-    return _search_func(emb)
+    return _search_func(emb, min_count=min_count)
