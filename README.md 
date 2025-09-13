@@ -24,3 +24,16 @@ matches = results["search_func"](embedding)
 
 When ``return_emb`` is ``False`` (default), ``search_actor`` directly returns
 the top matches.
+
+## Command-line search
+
+Run the search CLI from the terminal:
+
+```bash
+python cli/search_cli.py --image path/to/image.jpg \
+    --sim-threshold 0.5 \
+    --margin-threshold 0.05 \
+    --top-k 5
+```
+
+All three optional flags default to values in `configs/config.yaml` when not provided.
