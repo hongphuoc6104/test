@@ -7,7 +7,7 @@ from prefect import task
 from utils.config_loader import load_config
 from utils.indexer import build_index
 from utils.vector_utils import _mean_vector
-
+from tasks.filter_clusters_task import filter_clusters_task
 
 @task(name="Build Character Profiles Task")
 def character_task():
@@ -88,6 +88,10 @@ def character_task():
         json.dump(characters, f, indent=2, ensure_ascii=False)
 
     print(f"[Character] Saved {len(characters)} character profiles to {output_json_path}")
+
+    # Lọc các cụm kém chất lượng trước khi xây dựng index
+    output_json_path = filter_clusters_task()
+
     # Xây dựng index cho các nhân vật
     index_path = storage_cfg.get("index_path")
     if index_path:
