@@ -57,6 +57,11 @@ def link_tracklets(
         bbox = np.array(row["bbox"])
         emb = np.array(row["emb"])
 
+        # prune tracks that are older than the previous frame to keep lookups fast
+        active_tracks = [
+            t for t in active_tracks if t["last_frame"] >= frame_idx - 1
+        ]
+
         matched_track = None
         for track in active_tracks:
             # only consider tracks from previous frame
