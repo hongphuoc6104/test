@@ -1,32 +1,56 @@
-from typing import List, Dict
+from __future__ import annotations
+
+import json
+import pandas as pd
 from prefect import task
 
-@task
-def filter_clusters(clusters: List[Dict]) -> List[Dict]:
+
+@task(name="Filter Clusters Task")
+def filter_clusters_task(
+    clusters: pd.DataFrame,
+    characters_path: str,
+    min_size: int = 3,
+    min_det: float = 0.6,
+    min_frames: int = 5,
+):
+    """Remove low-quality clusters and update ``characters.json``.
+
+    Parameters
+    ----------
+    clusters:
+        DataFrame of tracklets with at least ``final_character_id``, ``det_score``
+        and ``frame`` columns.
+    characters_path:
+        Path to the characters JSON file to be filtered in-place.
+
+    Returns
+    -------
+    str
+        The path to the cleaned ``characters.json`` file.
     """
-    Remove clusters that fail basic quality thresholds.
 
-    Criteria:
-    - fewer than 3 tracklets
-    - average detection score below 0.6
-    - total frames across tracklets fewer than 5
-    """
-    cleaned = []
-    for cluster in clusters:
-        tracklets = cluster.get("tracklets", [])
-        if len(tracklets) < 3:
-            continue
+    stats = (
+        clusters.groupby("final_character_id")
+        .agg(
+            size=("final_character_id", "size"),
+            mean_det=("det_score", "mean"),
+            frames=("frame", "nunique"),
+        )
+        .reset_index()
+    )
 
-        det_scores = [t.get("det_score", 0.0) for t in tracklets]
-        if det_scores and (sum(det_scores) / len(det_scores)) < 0.6:
-            continue
+    valid_ids = stats[
+        (stats["size"] >= min_size)
+        & (stats["mean_det"] >= min_det)
+        & (stats["frames"] >= min_frames)
+    ]["final_character_id"].astype(str).tolist()
 
-        total_frames = sum(t.get("frame_count", 0) for t in tracklets)
-        if total_frames < 5:
-            continue
+    with open(characters_path, "r", encoding="utf-8") as f:
+        characters = json.load(f)
 
-        cleaned.append(cluster)
+    filtered = {cid: characters[cid] for cid in valid_ids if cid in characters}
 
-    return cleaned
+    with open(characters_path, "w", encoding="utf-8") as f:
+        json.dump(filtered, f, indent=2, ensure_ascii=False)
 
-filter_clusters_task = filter_clusters
+    return characters_path
