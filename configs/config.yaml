@@ -30,9 +30,9 @@ pca:
 
 clustering:
   algo: "agglomerative"
-  distance_threshold: 0.95
+  distance_threshold: 0.7
   metric: "cosine"
-  linkage: "average"
+  linkage: "complete"
 
 post_merge:
   enable: true
