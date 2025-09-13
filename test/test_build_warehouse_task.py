@@ -7,6 +7,39 @@ pq = pytest.importorskip("pyarrow.parquet")
 import tasks.build_warehouse_task as bwt
 
 
+def test_build_warehouse_appends_movie_id(tmp_path, monkeypatch):
+    table1 = pa.table({"col": [1]})
+    table2 = pa.table({"col": [2]})
+    emb_dir = tmp_path / "emb"
+    emb_dir.mkdir()
+    path1 = emb_dir / "m1.parquet"
+    path2 = emb_dir / "m2.parquet"
+    pq.write_table(table1, path1)
+    pq.write_table(table2, path2)
+
+    metadata = {
+        "m1": {"embedding_file_path": str(path1)},
+        "m2": {"embedding_file_path": str(path2)},
+    }
+    metadata_json = tmp_path / "metadata.json"
+    with open(metadata_json, "w", encoding="utf-8") as f:
+        json.dump(metadata, f)
+
+    warehouse_path = tmp_path / "warehouse" / "embeddings.parquet"
+    storage = {
+        "metadata_json": str(metadata_json),
+        "warehouse_embeddings": str(warehouse_path),
+    }
+    cfg = {"storage": storage}
+    monkeypatch.setattr(bwt, "load_config", lambda: cfg)
+
+    bwt.build_warehouse_task.fn()
+
+    result = pq.read_table(warehouse_path)
+    assert "movie_id" in result.column_names
+    assert result.column("movie_id").to_pylist() == [0, 1]
+
+
 def test_build_warehouse_closes_on_error(tmp_path, monkeypatch):
     table1 = pa.table({"col": [1]})
     table2 = pa.table({"col": [2]})

@@ -1,5 +1,6 @@
 import os
 import json
+import pyarrow as pa
 import pyarrow.parquet as pq
 from prefect import task
 from utils.config_loader import load_config
@@ -39,8 +40,18 @@ def build_warehouse_task():
     if not embedding_files:
         raise RuntimeError("Không có dữ liệu nào để gom. Hãy chạy embedding_task trước.")
 
-    first_movie, first_path = embedding_files[0]
+    # Gán movie_id cho từng phim dựa trên thứ tự xuất hiện
+    embedding_files_with_id = [
+        (movie, path, movie_id)
+        for movie_id, (movie, path) in enumerate(embedding_files)
+    ]
+
+    # Đọc bảng đầu tiên và thêm cột movie_id
+    _, first_path, first_id = embedding_files_with_id[0]
     first_table = pq.read_table(first_path)
+    first_table = first_table.append_column(
+        "movie_id", pa.array([first_id] * first_table.num_rows, pa.int32())
+    )
     schema = first_table.schema
 
     # 3. Ghi các bảng vào file warehouse sử dụng ParquetWriter
@@ -49,11 +60,14 @@ def build_warehouse_task():
         writer.write_table(first_table)
 
         # Ghi các bảng còn lại
-        for movie, path in embedding_files[1:]:
+        for movie, path, movie_id in embedding_files_with_id[1:]:
             table = pq.read_table(path)
+            table = table.append_column(
+                "movie_id", pa.array([movie_id] * table.num_rows, pa.int32())
+            )
             if table.schema != schema:
                 table = table.cast(schema)
             writer.write_table(table)
 
-    print(f"Đã gom {len(embedding_files)} file vào {warehouse_path}")
+    print(f"Đã gom {len(embedding_files_with_id)} file vào {warehouse_path}")
     return warehouse_path

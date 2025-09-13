@@ -30,20 +30,25 @@ def cluster_task():
     if "track_centroid" not in df.columns:
         raise ValueError("[Cluster] Input parquet must contain column: track_centroid")
 
-    if "movie_id" not in df.columns:
-        print(
-            "[WARN] movie_id column not found. Treating entire dataset as one movie.",
-        )
-        df["movie_id"] = 0
+    # Xác định cột dùng để gom cụm theo phim
+    if "movie_id" in df.columns:
+        group_col = "movie_id"
+    elif "movie" in df.columns:
+        group_col = "movie"
+        print("[INFO] movie_id column not found. Grouping by movie.")
+    else:
+        print("[WARN] No movie information found. Treating entire dataset as one movie.")
+        group_col = "_movie_tmp"
+        df[group_col] = 0
 
-    df_tracks = df.drop_duplicates(subset=["movie_id", "track_id"])
+    df_tracks = df.drop_duplicates(subset=[group_col, "track_id"])
 
     print(f"[INFO] Đã load {len(df_tracks)} track centroids để gom cụm.")
 
     # Gom cụm theo từng phim
     results = []
-    for movie_id, group in df_tracks.groupby("movie_id"):
-        print(f"Running Agglomerative Clustering for movie_id={movie_id}...")
+    for movie_key, group in df_tracks.groupby(group_col):
+        print(f"Running Agglomerative Clustering for {group_col}={movie_key}...")
         emb_matrix = np.array(group["track_centroid"].tolist(), dtype=np.float32)
 
         if len(group) > 1:
@@ -60,7 +65,7 @@ def cluster_task():
             labels = np.array([0])
 
         group = group.copy()
-        group["cluster_id"] = [f"{movie_id}_{lbl}" for lbl in labels]
+        group["cluster_id"] = [f"{movie_key}_{lbl}" for lbl in labels]
         results.append(group)
 
     # Giữ lại TẤT CẢ các cột khi lưu kết quả
