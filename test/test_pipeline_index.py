@@ -72,6 +72,7 @@ def test_pipeline_creates_index(tmp_path, monkeypatch):
     monkeypatch.setattr(pipeline, "validate_warehouse_task", dummy)
     monkeypatch.setattr(pipeline, "pca_task", dummy)
     monkeypatch.setattr(pipeline, "cluster_task", dummy)
+    monkeypatch.setattr(pipeline, "preview_clusters_task", dummy)
 
     def fake_build_index(chars_path, index_path):
         map_path = storage["index_map"]

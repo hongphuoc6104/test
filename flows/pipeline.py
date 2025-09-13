@@ -6,6 +6,7 @@ from tasks.build_warehouse_task import build_warehouse_task
 from tasks.validation_task import validate_warehouse_task
 from tasks.pca_task import pca_task
 from tasks.cluster_task import cluster_task
+from tasks.preview_clusters_task import preview_clusters_task
 from tasks.character_task import character_task
 
 
@@ -45,6 +46,9 @@ def main_pipeline():
     cluster_task()
     print("--- Cluster Task Completed ---")
 
+    preview_clusters_task()
+    print("--- Preview Clusters Task Completed ---")
+    
     character_task()
     print("--- Character Profile Task Completed ---")
 
