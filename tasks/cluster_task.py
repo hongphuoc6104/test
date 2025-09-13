@@ -26,12 +26,15 @@ def cluster_task():
         print("[INFO] Clustering on original 512-dim data.")
 
     df = pd.read_parquet(embeddings_path)
-    required_cols = {"emb", "movie_id"}
-    missing_cols = required_cols - set(df.columns)
-    if missing_cols:
-        raise ValueError(
-            f"[Cluster] Input parquet must contain columns: {', '.join(missing_cols)}"
+
+    if "emb" not in df.columns:
+        raise ValueError("[Cluster] Input parquet must contain column: emb")
+
+    if "movie_id" not in df.columns:
+        print(
+            "[WARN] 'movie_id' column not found. Treating entire dataset as one movie."
         )
+        df["movie_id"] = 0
 
     print(f"[INFO] Đã load {len(df)} embeddings để gom cụm.")
 
