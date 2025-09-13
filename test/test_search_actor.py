@@ -88,7 +88,7 @@ def test_embedding_and_search(tmp_path, monkeypatch):
     # --- Build characters_json using produced embedding ---
     emb_file = os.path.join(storage["embeddings_folder_per_movie"], "movie1.parquet")
     df = pd.read_parquet(emb_file)
-    emb_vec = df["emb"].iloc[0]
+    emb_vec = df["emb"].iloc[0].tolist()
     characters = {"0": {"embedding": emb_vec, "movies": ["movie1"]}}
     with open(storage["characters_json"], "w", encoding="utf-8") as f:
         json.dump(characters, f)
