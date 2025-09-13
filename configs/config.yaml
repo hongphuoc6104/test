@@ -64,6 +64,8 @@ search:
   knn: 1
   noise_knn: 50
   noise_cosine_floor: 0.45
+  sim_threshold: 0.5
+  margin_threshold: 0.05
 
 logging:
   mlflow_experiment: "face_discovery_mvp"
