@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from utils.config_loader import load_config
-from utils.vector_utils import _mean_vector
+from utils.vector_utils import _mean_vector, l2_normalize
 
 
 def build_index(characters_json: str, index_path: str) -> None:
@@ -46,14 +46,14 @@ def build_index(characters_json: str, index_path: str) -> None:
         for char_id in characters.keys():
             cid = int(char_id)
             if cid in grouped.index:
-                vectors.append(grouped.loc[cid])
+                vectors.append(l2_normalize(grouped.loc[cid]))
                 char_ids.append(cid)
     else:
         # fallback: lấy embedding trực tiếp từ JSON nếu có
         for char_id, info in characters.items():
             emb = info.get("embedding")
             if emb is not None:
-                vectors.append(np.array(emb, dtype="float32"))
+                vectors.append(l2_normalize(np.array(emb, dtype="float32")))
                 char_ids.append(int(char_id))
 
     if not vectors:

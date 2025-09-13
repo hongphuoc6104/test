@@ -6,7 +6,7 @@ from sklearn.cluster import AgglomerativeClustering
 from prefect import task
 from utils.config_loader import load_config
 from utils.indexer import build_index
-from utils.vector_utils import _mean_vector
+from utils.vector_utils import _mean_vector, l2_normalize
 from tasks.filter_clusters_task import filter_clusters_task
 
 
@@ -41,7 +41,7 @@ def character_task():
     )
     base_cluster_ids = centroids_df["cluster_id"].tolist()
     centroid_vectors = np.stack(centroids_df["emb"].values)
-
+    centroid_vectors = np.array([l2_normalize(v) for v in centroid_vectors])
     # === BƯỚC 3: Gom cụm tầng hai (Post-merge) ===
     if post_merge_cfg.get("enable", False):
         print("[Character] Post-merging enabled. Clustering centroids...")
