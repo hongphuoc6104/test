@@ -33,7 +33,8 @@ Run the search CLI from the terminal:
 python cli/search_cli.py --image path/to/image.jpg \
     --sim-threshold 0.5 \
     --margin-threshold 0.05 \
-    --top-k 5
+    --top-k 5 \
+    --ratio-threshold 1.1
 ```
 
-All three optional flags default to values in `configs/config.yaml` when not provided.
+All optional flags default to values in `configs/config.yaml` when not provided.

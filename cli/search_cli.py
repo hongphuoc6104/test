@@ -18,6 +18,7 @@ def main():
     default_margin_threshold = search_cfg.get("margin_threshold", 0.05)
     default_top_k = max(2, search_cfg.get("knn", 5))
     default_min_count = search_cfg.get("min_count", 0)
+    default_ratio_threshold = search_cfg.get("ratio_threshold", 1.1)
     pca_model_path = storage_cfg.get("pca_model", "models/pca_model.joblib")
 
     parser = argparse.ArgumentParser(description="Search actor by face image")
@@ -46,8 +47,13 @@ def main():
         default=default_min_count,
         help="Minimum occurrence count for characters (default from config)",
     )
+    parser.add_argument(
+        "--ratio-threshold",
+        type=float,
+        default=default_ratio_threshold,
+        help="Minimum ratio between top-1 and top-2 similarities for a valid match (default from config)",
+    )
     args = parser.parse_args()
-
     # --- Get embedding and search function ---
     results = search_actor(args.image, return_emb=True)
     if not results or "embedding" not in results:
@@ -78,6 +84,11 @@ def main():
     ]
 
     if sim_top1 < args.sim_threshold:
+        print("Unknown")
+        return
+
+    eps = 1e-8
+    if sim_top1 / max(sim_top2, eps) < args.ratio_threshold:
         print("Unknown")
         return
 

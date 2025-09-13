@@ -71,6 +71,7 @@ index:
     noise_cosine_floor: 0.45
     sim_threshold: 0.5
     margin_threshold: 0.05
+    ratio_threshold: 1.1
     min_count: 3
 
 logging:
