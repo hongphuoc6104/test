@@ -91,7 +91,7 @@ def character_task():
     print(f"[Character] Saved {len(characters)} character profiles to {output_json_path}")
 
     # Lọc các cụm kém chất lượng trước khi xây dựng index
-    output_json_path = filter_clusters_task(df, output_json_path)
+    output_json_path = filter_clusters_task(df, output_json_path, cfg)
 
     # Xây dựng index cho các nhân vật
     index_path = storage_cfg.get("index_path")

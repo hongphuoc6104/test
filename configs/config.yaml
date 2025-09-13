@@ -41,6 +41,12 @@ post_merge:
   metric: "cosine"
   linkage: "average"
 
+filter_clusters:
+  min_size: 3
+  min_det: 0.6
+  min_frames: 5
+
+
 quality_filters:
   enable: true
   min_det_score: 0.5

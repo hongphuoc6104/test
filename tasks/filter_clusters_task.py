@@ -9,9 +9,7 @@ from prefect import task
 def filter_clusters_task(
     clusters: pd.DataFrame,
     characters_path: str,
-    min_size: int = 3,
-    min_det: float = 0.6,
-    min_frames: int = 5,
+    cfg: dict,
 ):
     """Remove low-quality clusters and update ``characters.json``.
 
@@ -22,12 +20,17 @@ def filter_clusters_task(
         and ``frame`` columns.
     characters_path:
         Path to the characters JSON file to be filtered in-place.
-
+    cfg:
+        Configuration dictionary containing ``filter_clusters`` options.
     Returns
     -------
     str
         The path to the cleaned ``characters.json`` file.
     """
+    filter_cfg = cfg.get("filter_clusters", {})
+    min_size = int(filter_cfg.get("min_size", 3))
+    min_det = float(filter_cfg.get("min_det", 0.6))
+    min_frames = int(filter_cfg.get("min_frames", 5))
 
     stats = (
         clusters.groupby("final_character_id")
