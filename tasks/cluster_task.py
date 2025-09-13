@@ -4,6 +4,7 @@ from sklearn.cluster import AgglomerativeClustering
 from prefect import task
 from utils.config_loader import load_config
 
+
 @task(name="Cluster Faces Task")
 def cluster_task():
     """
@@ -27,22 +28,25 @@ def cluster_task():
 
     df = pd.read_parquet(embeddings_path)
 
-    if "emb" not in df.columns:
-        raise ValueError("[Cluster] Input parquet must contain column: emb")
+    if "track_centroid" not in df.columns:
+        raise ValueError("[Cluster] Input parquet must contain column: track_centroid")
 
-    if "movie_id" not in df.columns:
+    movie_col = "movie_id" if "movie_id" in df.columns else "movie"
+    if movie_col not in df.columns:
         print(
-            "[WARN] 'movie_id' column not found. Treating entire dataset as one movie."
+            "[WARN] movie identifier column not found. Treating entire dataset as one movie.",
         )
-        df["movie_id"] = 0
+        df[movie_col] = 0
 
-    print(f"[INFO] Đã load {len(df)} embeddings để gom cụm.")
+    df_tracks = df.drop_duplicates(subset=[movie_col, "track_id"])
 
-    # Gom cụm theo từng movie_id
+    print(f"[INFO] Đã load {len(df_tracks)} track centroids để gom cụm.")
+
+    # Gom cụm theo từng phim
     results = []
-    for movie_id, group in df.groupby("movie_id"):
-        print(f"Running Agglomerative Clustering for movie_id={movie_id}...")
-        emb_matrix = np.array(group["emb"].tolist(), dtype=np.float32)
+    for movie_id, group in df_tracks.groupby(movie_col):
+        print(f"Running Agglomerative Clustering for {movie_col}={movie_id}...")
+        emb_matrix = np.array(group["track_centroid"].tolist(), dtype=np.float32)
 
         if len(group) > 1:
             clusterer = AgglomerativeClustering(

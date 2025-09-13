@@ -11,6 +11,7 @@ from insightface.app import FaceAnalysis
 from utils.config_loader import load_config
 from utils.image_utils import calculate_blur_score, check_brightness, check_contrast
 from utils.vector_utils import l2_normalize
+from .tracklet_task import link_tracklets
 
 
 # --- Các hàm tiện ích ---
@@ -129,7 +130,7 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
     return movie_specific_rows
 
 
-# --- Task chnh ---
+# --- Task chính ---
 @task(name="Embedding Task")
 def embedding_task():
     cfg = load_config()
@@ -187,6 +188,19 @@ def embedding_task():
             continue
 
         df_movie = pd.DataFrame(movie_rows)
+
+        # Liên kết các khuôn mặt liên tiếp thành tracklet và gán track_id
+        df_movie = link_tracklets(df_movie)
+
+        # Tính track_centroid cho từng track bằng median
+        centroids = (
+            df_movie.groupby("track_id")["emb"]
+            .apply(lambda e: np.median(np.stack(e.to_list()), axis=0))
+            .rename("track_centroid")
+        )
+        df_movie = df_movie.merge(centroids, on="track_id")
+        df_movie["track_centroid"] = df_movie["track_centroid"].apply(lambda x: x.tolist())
+
         df_movie.to_parquet(expected_parquet_path, index=False)
         print(f"✅ Đã lưu {len(movie_rows)} embeddings cho phim '{movie_name}' tại: {expected_parquet_path}")
 
