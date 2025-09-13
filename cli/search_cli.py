@@ -18,8 +18,8 @@ def main():
     storage_cfg = cfg.get("storage", {})
     pca_model_path = storage_cfg.get("pca_model", "models/pca_model.joblib")
 
-    # --- Gọi search_actor để lấy embedding query ---
-    results = search_actor(args.image, return_emb=True)  # bạn cần chỉnh search_actor để hỗ trợ return_emb
+    # --- Get embedding and search function ---
+    results = search_actor(args.image, return_emb=True)
     if not results or "embedding" not in results:
         print("No matching actors found.")
         return

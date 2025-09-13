@@ -1,8 +1,8 @@
 import json
-
-import pyarrow as pa
-import pyarrow.parquet as pq
 import pytest
+
+pa = pytest.importorskip("pyarrow")
+pq = pytest.importorskip("pyarrow.parquet")
 
 import tasks.build_warehouse_task as bwt
 

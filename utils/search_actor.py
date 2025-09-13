@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, List
+from typing import Any, Callable, Dict, List, Union
 
 import cv2
 import numpy as np
@@ -27,8 +27,34 @@ def _query_index(index: Any, emb: np.ndarray, k: int) -> tuple[np.ndarray, np.nd
     raise TypeError("Unsupported index type")
 
 
-def search_actor(image_path: str, k: int = 5) -> List[Dict[str, Any]]:
-    """Find the closest characters in the index based on an image."""
+def search_actor(
+    image_path: str,
+    k: int = 5,
+    return_emb: bool = False,
+) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
+    """Find the closest characters in the index based on an image.
+
+    Parameters
+    ----------
+    image_path: str
+        Path to the image containing a face.
+    k: int, optional
+        Number of top matches to retrieve.
+    return_emb: bool, optional
+        If ``True``, return the computed embedding and a search function
+        instead of querying the index immediately.
+
+    Returns
+    -------
+    When ``return_emb`` is ``False`` (default)
+        A list of match dictionaries containing ``character_id``, ``movies``
+        and ``distance``.
+    When ``return_emb`` is ``True``
+        A dictionary with keys:
+            ``embedding`` - the computed embedding as a list.
+            ``search_func`` - callable accepting an embedding and returning
+            search results.
+    """
     cfg = load_config()
     emb_cfg = cfg["embedding"]
     storage_cfg = cfg["storage"]
@@ -40,11 +66,11 @@ def search_actor(image_path: str, k: int = 5) -> List[Dict[str, Any]]:
 
     img = cv2.imread(image_path)
     if img is None:
-        return []
+        return {} if return_emb else []
 
     faces = app.get(img)
     if not faces:
-        return []
+        return {} if return_emb else []
 
     faces.sort(key=lambda f: f.det_score, reverse=True)
     emb = faces[0].embedding
@@ -52,21 +78,31 @@ def search_actor(image_path: str, k: int = 5) -> List[Dict[str, Any]]:
         emb = l2_normalize(emb)
 
     emb = np.asarray([emb], dtype="float32")
-    distances, indices = _query_index(index, emb, k)
-
     with open(storage_cfg["characters_json"], "r", encoding="utf-8") as f:
         characters = json.load(f)
+    def _search_func(query_emb: np.ndarray, top_k: int = k) -> List[Dict[str, Any]]:
+        """Search the loaded index using the provided embedding."""
+        q = np.asarray(query_emb, dtype="float32")
+        if q.ndim == 1:
+            q = np.asarray([q], dtype="float32")
+        distances, indices = _query_index(index, q, top_k)
+        results: List[Dict[str, Any]] = []
+        for dist, idx in zip(distances, indices):
+            char_id = str(id_map.get(int(idx), idx))
+            movies = characters.get(char_id, {}).get("movies", [])
+            results.append(
+                {
+                    "character_id": char_id,
+                    "movies": movies,
+                    "distance": float(dist),
+                }
+            )
+        return results
 
-    results: List[Dict[str, Any]] = []
-    for dist, idx in zip(distances, indices):
-        char_id = str(id_map.get(int(idx), idx))
-        movies = characters.get(char_id, {}).get("movies", [])
-        results.append(
-            {
-                "character_id": char_id,
-                "movies": movies,
-                "distance": float(dist),
-            }
-        )
+    if return_emb:
+        return {
+            "embedding": emb[0].tolist(),
+            "search_func": _search_func,
+        }
 
-    return results
+    return _search_func(emb)

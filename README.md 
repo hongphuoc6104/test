@@ -7,3 +7,20 @@ Install the project in editable mode:
 ```bash
 pip install -e .
 ```
+
+## Searching Actors
+
+Use ``utils.search_actor.search_actor`` to compute a face embedding and search
+against the index. To retrieve only the embedding along with a search function
+for later use:
+
+```python
+from utils.search_actor import search_actor
+
+results = search_actor("path/to/image.jpg", return_emb=True)
+embedding = results["embedding"]
+matches = results["search_func"](embedding)
+```
+
+When ``return_emb`` is ``False`` (default), ``search_actor`` directly returns
+the top matches.
