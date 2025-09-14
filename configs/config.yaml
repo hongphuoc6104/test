@@ -38,6 +38,9 @@ clustering:
   metric: "cosine"
   linkage: "complete"
   min_cluster_size: 5
+  filter:
+    min_size: 3
+    min_det: 0.6
 
 post_merge:
   enable: true

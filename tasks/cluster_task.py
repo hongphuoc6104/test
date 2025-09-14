@@ -153,6 +153,11 @@ def cluster_task():
 
     # Giữ lại TẤT CẢ các cột khi lưu kết quả
     clusters_df = pd.concat(results, ignore_index=True)
+    # Filter out low-quality clusters based on config thresholds
+    filter_cfg = clustering_cfg.get("filter", {})
+    min_det = float(filter_cfg.get("min_det", 0.5))
+    min_size = int(filter_cfg.get("min_size", 3))
+    clusters_df = filter_clusters(clusters_df, min_det=min_det, min_size=min_size)
 
     # Logic thống kê
     unique_labels, counts = np.unique(clusters_df["cluster_id"], return_counts=True)
