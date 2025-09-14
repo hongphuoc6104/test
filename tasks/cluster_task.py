@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
+from sklearn.metrics.pairwise import cosine_similarity
 from prefect import task
 from utils.config_loader import load_config
 
@@ -73,7 +74,7 @@ def cluster_task():
             # Resolve distance threshold (global or per-movie) depending on embedding type
             if pca_cfg.get("enable", False):
                 dist_cfg = clustering_cfg.get(
-                    "pca_distance_threshold",
+                    "distance_threshold_pca",
                     clustering_cfg.get("distance_threshold", 0.7),
                 )
             else:
@@ -112,17 +113,16 @@ def cluster_task():
             if algo in {"auto", "hdbscan"}:
                 import hdbscan
 
-                hdb_metric = metric if metric != "cosine" else "euclidean"
-                if metric == "cosine":
-                    print(
-                        "[WARN] HDBSCAN does not support cosine metric; falling back to euclidean."
-                    )
+                # Precompute cosine distance matrix for HDBSCAN
+                dist_matrix = 1 - cosine_similarity(emb_matrix)
 
+                hdbscan_cfg = clustering_cfg.get("hdbscan", {})
                 hdb_clusterer = hdbscan.HDBSCAN(
-                    min_cluster_size=int(clustering_cfg.get("min_cluster_size", 5)),
-                    metric=hdb_metric,
+                    min_cluster_size=int(hdbscan_cfg.get("min_cluster_size", 5)),
+                    min_samples=int(hdbscan_cfg.get("min_samples", 5)),
+                    metric="precomputed",
                 )
-                hdb_labels = hdb_clusterer.fit_predict(emb_matrix)
+                hdb_labels = hdb_clusterer.fit_predict(dist_matrix)
                 n_hdb = len(set(hdb_labels)) - (1 if -1 in hdb_labels else 0)
                 outlier_ratio = float(np.mean(hdb_labels == -1))
                 print(
@@ -151,13 +151,9 @@ def cluster_task():
         group["cluster_id"] = [f"{movie_key}_{lbl}" for lbl in chosen_labels]
         results.append(group)
 
-    # Giữ lại TẤT CẢ các cột khi lưu kết quả
+    # Giữ lại TẤT CẢ các cột khi lưu kết quả và lọc các cụm chất lượng thấp
     clusters_df = pd.concat(results, ignore_index=True)
-    # Filter out low-quality clusters based on config thresholds
-    filter_cfg = clustering_cfg.get("filter", {})
-    min_det = float(filter_cfg.get("min_det", 0.5))
-    min_size = int(filter_cfg.get("min_size", 3))
-    clusters_df = filter_clusters(clusters_df, min_det=min_det, min_size=min_size)
+    clusters_df = filter_clusters(clusters_df)
 
     # Logic thống kê
     unique_labels, counts = np.unique(clusters_df["cluster_id"], return_counts=True)

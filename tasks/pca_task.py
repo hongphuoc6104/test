@@ -43,8 +43,9 @@ def pca_task():
     print(f"[PCA] Loaded {X.shape[0]} embeddings with dimension {X.shape[1]}.")
 
     # 3. Fit PCA
-    n_components = pca_cfg.get("n_components", 128)
-    whiten = pca_cfg.get("whiten", False)
+    # Cho phép cấu hình số chiều và tuỳ chọn whitening
+    n_components = int(pca_cfg.get("n_components", 256))
+    whiten = bool(pca_cfg.get("whiten", False))
 
     print(f"[PCA] Fitting PCA with n_components={n_components}, whiten={whiten} ...")
     pca_model = PCA(n_components=n_components, whiten=whiten, random_state=42)
