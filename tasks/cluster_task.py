@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import pandas as pd
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from prefect import task
 from utils.config_loader import load_config
-from __future__ import annotations
 
 def filter_clusters(df: pd.DataFrame, min_det: float = 0.5, min_size: int = 3) -> pd.DataFrame:
     stats = (

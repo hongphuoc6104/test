@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import pandas as pd
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
@@ -7,7 +5,7 @@ from prefect import task
 from utils.config_loader import load_config
 
 
-def filter_clusters(df: pd.DataFrame, min_det: float = 0.5, min_size: int = 3) -> pd.DataFrame:
+def filter_clusters(df: 'pd.DataFrame', min_det: float = 0.5, min_size: int = 3) -> 'pd.DataFrame':
     stats = (
         df.groupby("cluster_id")
         .agg(median_det=("det_score", "median"), size=("track_id", "size"))
