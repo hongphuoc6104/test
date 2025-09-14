@@ -32,6 +32,11 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
 
     movie_specific_rows = []
     q_filters = config.get("quality_filters", {})
+    stats = {
+        "removed_det_score": 0,
+        "removed_face_ratio": 0,
+        "removed_blur": 0,
+    }
 
     storage_cfg = config["storage"]
     face_crops_root = storage_cfg["face_crops_root"]
@@ -57,15 +62,17 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
                 continue
 
             frame_area = processing_img.shape[0] * processing_img.shape[1]
-            min_face_area = config["min_face_ratio"] * frame_area
+            min_face_area = q_filters.get("min_face_ratio", 0.003) * frame_area
 
             good_quality_faces = []
             for face in faces:
                 # --- Filter tầng 1 ---
-                if face.det_score < config["min_det_score"]:
+                if face.det_score < q_filters.get("min_det_score", 0.4):
+                    stats["removed_det_score"] += 1
                     continue
                 x1, y1, x2, y2 = face.bbox
                 if (x2 - x1) * (y2 - y1) < min_face_area:
+                    stats["removed_face_ratio"] += 1
                     continue
 
                 # --- Crop khuôn mặt gốc ---
@@ -87,7 +94,8 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
 
                 # --- Filter tầng 3: blur ---
                 blur_score = calculate_blur_score(face_crop)
-                if blur_score < config["min_blur_clarity"]:
+                if blur_score < q_filters.get("min_blur_clarity", 60.0):
+                    stats["removed_blur"] += 1
                     continue
 
                 good_quality_faces.append(face)
@@ -133,21 +141,24 @@ def process_single_movie(movie_name, movie_frames_path, app, config):
             print(f"\n[Error] failed to process {img_path}: {e}")
             continue
 
-    return movie_specific_rows
+    return movie_specific_rows, stats
 
 
 # --- Task chính ---
 @task(name="Embedding Task")
 def embedding_task():
     cfg = load_config()
-
+    q_cfg = cfg.get("quality_filters", {})
     config = {
         "embedding": cfg["embedding"],
         "storage": cfg["storage"],
-        "quality_filters": cfg.get("quality_filters", {}),
-        "min_det_score": cfg["quality_filters"].get("min_det_score", 0.5),
-        "min_face_ratio": cfg["quality_filters"].get("min_face_ratio", 0.005),
-        "min_blur_clarity": cfg["quality_filters"].get("min_blur_clarity", 70.0),
+        "quality_filters": {
+            "min_det_score": q_cfg.get("min_det_score", 0.4),
+            "min_face_ratio": q_cfg.get("min_face_ratio", 0.003),
+            "min_blur_clarity": q_cfg.get("min_blur_clarity", 60.0),
+            "brightness": q_cfg.get("brightness", {}),
+            "contrast": q_cfg.get("contrast", {}),
+        },
         "max_faces_per_frame": cfg.get("search", {}).get("max_faces_per_frame", 5),
         "pre_resize_dim": cfg.get("pre_resize_dim", 1280),
     }
@@ -176,6 +187,7 @@ def embedding_task():
         d for d in os.listdir(frames_root) if os.path.isdir(os.path.join(frames_root, d))
     ]
     new_data_generated = False
+    quality_logs = []
 
     for movie_name in movie_folders:
         expected_parquet_path = os.path.join(embeddings_folder, f"{movie_name}.parquet")
@@ -214,7 +226,10 @@ def embedding_task():
         print(f"\nProcessing movie: {movie_name}")
         movie_frames_path = os.path.join(frames_root, movie_name)
 
-        movie_rows = process_single_movie(movie_name, movie_frames_path, app, config)
+        movie_rows, q_stats = process_single_movie(
+            movie_name, movie_frames_path, app, config
+        )
+        quality_logs.append({"movie": movie_name, **q_stats})
 
         if movie_name not in all_metadata:
             all_metadata[movie_name] = {}
@@ -252,6 +267,11 @@ def embedding_task():
 
         all_metadata[movie_name]["num_faces_detected"] = len(movie_rows)
         all_metadata[movie_name]["embedding_file_path"] = expected_parquet_path
+
+    if quality_logs:
+        os.makedirs("logs", exist_ok=True)
+        pd.DataFrame(quality_logs).to_csv("logs/track_quality.csv", index=False)
+        print("[INFO] Saved track quality log -> logs/track_quality.csv")
 
     if new_data_generated:
         with open(metadata_filepath, "w", encoding="utf-8") as f:

@@ -31,7 +31,7 @@ pca:
 
 clustering:
   algo: "agglomerative"
-  distance_threshold: 0.76
+  distance_threshold: 0.70
   metric: "cosine"
   linkage: "complete"
 
@@ -48,9 +48,9 @@ filter_clusters:
 
 quality_filters:
   enable: true
-  min_det_score: 0.5
-  min_face_ratio: 0.005
-  min_blur_clarity: 70.0
+  min_det_score: 0.4
+  min_face_ratio: 0.003
+  min_blur_clarity: 60.0
   brightness:
     enable: true
     value_range: [30, 230]

@@ -3,6 +3,18 @@ import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from prefect import task
 from utils.config_loader import load_config
+from __future__ import annotations
+
+def filter_clusters(df: pd.DataFrame, min_det: float = 0.5, min_size: int = 3) -> pd.DataFrame:
+    stats = (
+        df.groupby("cluster_id")
+        .agg(median_det=("det_score", "median"), size=("track_id", "size"))
+    )
+    valid = stats[(stats["median_det"] >= min_det) & (stats["size"] >= min_size)].index
+    removed = len(stats) - len(valid)
+    if removed > 0:
+        print(f"[INFO] Filtered out {removed} low-quality clusters.")
+    return df[df["cluster_id"].isin(valid)].copy()
 
 
 @task(name="Cluster Faces Task")
