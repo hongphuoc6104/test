@@ -6,6 +6,12 @@ from prefect import task
 from utils.config_loader import load_config
 
 
+# Bộ phân loại khuôn mặt Haar để ước lượng số lượng khuôn mặt trong khung hình
+face_cascade = cv.CascadeClassifier(
+    cv.data.haarcascades + "haarcascade_frontalface_default.xml"
+)
+
+
 def extract_frames(video_path, root_output_folder):
     """Trích xuất khung hình và trả về thông tin metadata của video."""
     video_name = os.path.splitext(os.path.basename(video_path))[0]
@@ -30,7 +36,10 @@ def extract_frames(video_path, root_output_folder):
         "duration_seconds": round(duration_seconds, 2)
     }
 
-    frame_interval = int(fps) if fps > 0 else 30
+    default_interval = int(fps) if fps > 0 else 30
+    fast_interval = max(1, default_interval // 2)
+    current_interval = default_interval
+    min_faces = 2
     frame_count = 0
     saved_frame_count = 0
 
@@ -40,12 +49,17 @@ def extract_frames(video_path, root_output_folder):
         if not ret:
             break
 
-        if frame_count % frame_interval == 0:
+        if frame_count % current_interval == 0:
             frame_filename = os.path.join(
                 output_folder_for_movie, f"frame_{saved_frame_count:07d}.jpg"
             )
+            gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
             cv.imwrite(frame_filename, frame)
             saved_frame_count += 1
+
+            # Nếu cảnh có ít khuôn mặt, tăng tần suất lấy mẫu cho khung hình tiếp theo
+            current_interval = fast_interval if len(faces) < min_faces else default_interval
         frame_count += 1
 
     cap.release()
