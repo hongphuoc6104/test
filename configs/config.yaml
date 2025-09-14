@@ -34,20 +34,20 @@ clustering:
   metric: "euclidean"          # tránh fallback khó kiểm soát
   linkage: "complete"
   distance_threshold:
-    default: 0.44              # cho 256-D PCA + L2
-  pca_distance_threshold: 0.48 # dùng khi chạy trên PCA
+    default: 0.43              # cho 256-D PCA + L2
+  pca_distance_threshold: 0.46 # dùng khi chạy trên PCA
 
 post_merge:
   enable: true
   metric: "euclidean"          # thống nhất với trên
   linkage: "average"
-  distance_threshold: 0.46     # NGUYÊN NHÂN CHÍNH khiến còn 2–4 người
+  distance_threshold: 0.45     # NGUYÊN NHÂN CHÍNH khiến còn 2–4 người
 
 
 filter_clusters:
-  min_size: 5
-  min_det: 0.6
-  min_frames: 5
+  min_size: 6
+#  min_det: 0.6
+#  min_frames: 5
 
 quality_filters:
   enable: true
@@ -63,7 +63,7 @@ quality_filters:
 
 centroid:
   method: "trimmed_mean"
-  trim_ratio: 0.1
+  trim_ratio: 0.20
 
 index:
   type: "flat_ip"
