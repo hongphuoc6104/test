@@ -6,9 +6,9 @@ from tasks.build_warehouse_task import build_warehouse_task
 from tasks.validation_task import validate_warehouse_task
 from tasks.pca_task import pca_task
 from tasks.cluster_task import cluster_task
+from tasks.merge_clusters_task import merge_clusters_task
 from tasks.preview_clusters_task import preview_clusters_task
 from tasks.character_task import character_task
-
 
 
 @flow(name="Face Discovery MVP Pipeline")
@@ -20,7 +20,6 @@ def main_pipeline():
 
     # (NÂNG CẤP) Đọc config ngay từ đầu flow
     cfg = load_config()
-
 
     # Chạy các task tuần tự
     ingestion_task()
@@ -46,18 +45,17 @@ def main_pipeline():
     cluster_task()
     print("--- Cluster Task Completed ---")
 
+    merge_clusters_task()
+    print("--- Merge Clusters Task Completed ---")
+
     preview_clusters_task()
     print("--- Preview Clusters Task Completed ---")
-    
+
     character_task()
     print("--- Character Profile Task Completed ---")
-
 
     print("\n✅✅✅ All tasks completed successfully!")
 
 
 if __name__ == "__main__":
     main_pipeline()
-
-
-

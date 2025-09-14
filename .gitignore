@@ -8,7 +8,10 @@ env/
 .vscode/
 Data/
 models/
-warehouse/
+# Ignore warehouse data but keep code
+warehouse/*
+!warehouse/__init__.py
+!warehouse/update_pipeline.py
 
 
 # Data & models (không đưa dữ liệu & weight nặng lên git)
@@ -36,4 +39,3 @@ debug/
 # System files
 .DS_Store
 Thumbs.db
-
