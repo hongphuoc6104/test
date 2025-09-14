@@ -44,7 +44,7 @@ def pca_task():
 
     # 3. Fit PCA
     n_components = pca_cfg.get("n_components", 128)
-    whiten = pca_cfg.get("whiten", True)
+    whiten = pca_cfg.get("whiten", False)
 
     print(f"[PCA] Fitting PCA with n_components={n_components}, whiten={whiten} ...")
     pca_model = PCA(n_components=n_components, whiten=whiten, random_state=42)

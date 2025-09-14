@@ -26,14 +26,15 @@ embedding:
 
 pca:
   enable: true
-  n_components: 128
-  whiten: true
+  n_components: 256
+  whiten: false
 
 clustering:
   algo: "auto"  # agglomerative|hdbscan|auto
   distance_threshold:
     default: 0.76  # recommended 0.6-1.0
     per_movie: {}  # e.g. {movie_id: threshold}
+  pca_distance_threshold: 0.9  # threshold when clustering on PCA embeddings
   metric: "cosine"
   linkage: "complete"
   min_cluster_size: 5

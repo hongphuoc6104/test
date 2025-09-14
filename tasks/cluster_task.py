@@ -70,8 +70,14 @@ def cluster_task():
         emb_matrix = np.array(group["track_centroid"].tolist(), dtype=np.float32)
 
         if len(group) > 1:
-            # Resolve distance threshold (global or per-movie)
-            dist_cfg = clustering_cfg.get("distance_threshold", 0.7)
+            # Resolve distance threshold (global or per-movie) depending on embedding type
+            if pca_cfg.get("enable", False):
+                dist_cfg = clustering_cfg.get(
+                    "pca_distance_threshold",
+                    clustering_cfg.get("distance_threshold", 0.7),
+                )
+            else:
+                dist_cfg = clustering_cfg.get("distance_threshold", 0.7)
             if isinstance(dist_cfg, dict):
                 default_th = float(dist_cfg.get("default", 0.7))
                 per_movie = dist_cfg.get("per_movie", {})
