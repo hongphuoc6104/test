@@ -3,7 +3,7 @@ from utils.config_loader import load_config  # <--- IMPORT MỚI
 from tasks.ingestion_task import ingestion_task
 from tasks.embedding_task import embedding_task
 from tasks.build_warehouse_task import build_warehouse_task
-from tasks.validation_task import validate_warehouse_task
+from tasks.validation_task import validate_warehouse_task, validate_clusters_task
 from tasks.pca_task import pca_task
 from tasks.cluster_task import cluster_task
 from tasks.merge_clusters_task import merge_clusters_task
@@ -44,6 +44,9 @@ def main_pipeline():
 
     cluster_task()
     print("--- Cluster Task Completed ---")
+
+    validate_clusters_task()
+    print("--- Cluster Metrics Task Completed ---")
 
     merge_clusters_task()
     print("--- Merge Clusters Task Completed ---")

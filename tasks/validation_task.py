@@ -1,7 +1,10 @@
 import pandas as pd
 import numpy as np
+from sklearn.metrics import silhouette_score
+from pathlib import Path
 from prefect import task
 from utils.config_loader import load_config
+import warnings
 
 @task(name="Validate Warehouse Task")
 def validate_warehouse_task():
@@ -24,3 +27,44 @@ def validate_warehouse_task():
 
     print(f"✅ Validation thành công cho {len(df)} records!")
     return True
+
+
+@task(name="Cluster Metrics Task")
+def validate_clusters_task():
+    """Tính toán các metrics cho kết quả gom cụm."""
+    config = load_config()
+    clusters_path = config["storage"]["warehouse_clusters"]
+    print(f"[Metrics] Loading clusters from {clusters_path}")
+
+    df = pd.read_parquet(clusters_path)
+
+    labels = df["cluster_id"].astype(str)
+    emb_matrix = np.stack(df["track_centroid"].to_numpy())
+
+    unique_labels = labels.unique()
+    n_clusters = len(unique_labels)
+
+    if n_clusters <= 1:
+        silhouette = np.nan
+        warnings.warn("Single cluster detected. Silhouette score undefined.", RuntimeWarning)
+    else:
+        numeric_labels = pd.factorize(labels)[0]
+        silhouette = float(silhouette_score(emb_matrix, numeric_labels, metric="cosine"))
+        if silhouette < 0.2:
+            warnings.warn(f"Low silhouette score: {silhouette:.3f}", RuntimeWarning)
+
+    outlier_mask = labels.str.endswith("-1")
+    outlier_fraction = outlier_mask.mean()
+
+    cluster_sizes = labels.value_counts().rename_axis("cluster_id").reset_index(name="size")
+    cluster_sizes["silhouette"] = silhouette
+    cluster_sizes["outlier_fraction"] = outlier_fraction
+    cluster_sizes["n_clusters"] = n_clusters
+
+    reports_dir = Path("reports")
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    metrics_path = reports_dir / "cluster_metrics.csv"
+    cluster_sizes.to_csv(metrics_path, index=False)
+    print(f"[INFO] Saved cluster metrics -> {metrics_path}")
+
+    return metrics_path
