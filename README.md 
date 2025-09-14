@@ -38,3 +38,15 @@ python cli/search_cli.py --image path/to/image.jpg \
 ```
 
 All optional flags default to values in `configs/config.yaml` when not provided.
+
+## Cluster Previews
+
+`tasks/preview_clusters_task.py` tạo các ảnh minh họa cho từng cụm và lưu vào
+thư mục được cấu hình tại `storage.cluster_previews_root`. Mỗi
+`cluster_<id>` sẽ chứa tối đa 3 khung hình đại diện gồm:
+
+- Ảnh gốc (`*.jpg`)
+- Ảnh có vẽ bbox (`*_bbox.jpg`)
+
+Để kiểm tra thủ công chất lượng gom cụm, mở thư mục preview và quan sát các
+hình ảnh tương ứng.

@@ -73,6 +73,17 @@ def character_task():
 
         rep = group.loc[group["det_score"].idxmax()]
 
+        preview_paths: list[str] = []
+        previews_root = storage_cfg.get("cluster_previews_root")
+        if previews_root:
+            cluster_dir = os.path.join(previews_root, f"cluster_{int(char_id)}")
+            if os.path.isdir(cluster_dir):
+                preview_paths = [
+                    os.path.join(cluster_dir, f)
+                    for f in sorted(os.listdir(cluster_dir))
+                    if f.lower().endswith((".jpg", ".png"))
+                ]
+
         characters[str(int(char_id))] = {
             "count": int(len(group)),
             "movies": sorted(group["movie"].unique().tolist()),
@@ -82,6 +93,7 @@ def character_task():
                 "bbox": rep["bbox"] if isinstance(rep["bbox"], list) else rep["bbox"].tolist(),
                 "det_score": float(rep["det_score"]),
             },
+            "preview_paths": preview_paths,
         }
 
     os.makedirs(os.path.dirname(output_json_path), exist_ok=True)
