@@ -30,26 +30,22 @@ pca:
   whiten: false
 
 clustering:
-  algo: "auto"  # agglomerative|hdbscan|auto
-  distance_threshold:
-    default: 0.76  # recommended 0.6-1.0
-    per_movie: {}  # e.g. {movie_id: threshold}
-  pca_distance_threshold: 0.9  # threshold when clustering on PCA embeddings
-  metric: "cosine"
+  algo: "agglomerative"        # tạm bỏ auto/HDBSCAN cho ổn định
+  metric: "euclidean"          # tránh fallback khó kiểm soát
   linkage: "complete"
-  min_cluster_size: 5
-  filter:
-    min_size: 3
-    min_det: 0.6
+  distance_threshold:
+    default: 0.44              # cho 256-D PCA + L2
+  pca_distance_threshold: 0.48 # dùng khi chạy trên PCA
 
 post_merge:
   enable: true
-  distance_threshold: 1.0
-  metric: "cosine"
+  metric: "euclidean"          # thống nhất với trên
   linkage: "average"
+  distance_threshold: 0.46     # NGUYÊN NHÂN CHÍNH khiến còn 2–4 người
+
 
 filter_clusters:
-  min_size: 3
+  min_size: 5
   min_det: 0.6
   min_frames: 5
 
