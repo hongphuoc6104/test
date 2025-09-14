@@ -30,10 +30,13 @@ pca:
   whiten: true
 
 clustering:
-  algo: "agglomerative"
-  distance_threshold: 0.76
+  algo: "auto"  # agglomerative|hdbscan|auto
+  distance_threshold:
+    default: 0.76  # recommended 0.6-1.0
+    per_movie: {}  # e.g. {movie_id: threshold}
   metric: "cosine"
   linkage: "complete"
+  min_cluster_size: 5
 
 post_merge:
   enable: true

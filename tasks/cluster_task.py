@@ -3,6 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import silhouette_score
 from prefect import task
 from utils.config_loader import load_config
 
@@ -27,7 +28,7 @@ def cluster_task():
     config = load_config()
     storage_cfg = config["storage"]
     clustering_cfg = config["clustering"]
-    algo = clustering_cfg.get("algo", "agglomerative").lower()
+    algo = clustering_cfg.get("algo", "auto").lower()
     pca_cfg = config.get("pca", {})
 
     print(f"\n--- Starting Cluster Task ({algo.capitalize()}) ---")
@@ -63,37 +64,77 @@ def cluster_task():
     # Gom cụm theo từng phim
     results = []
     for movie_key, group in df_tracks.groupby(group_col):
-        print(
-            f"Running {algo.capitalize()} Clustering for {group_col}={movie_key}..."
-        )
+        print(f"Processing {group_col}={movie_key}...")
         emb_matrix = np.array(group["track_centroid"].tolist(), dtype=np.float32)
 
         if len(group) > 1:
-            if algo == "hdbscan":
+            # Resolve distance threshold (global or per-movie)
+            dist_cfg = clustering_cfg.get("distance_threshold", 0.7)
+            if isinstance(dist_cfg, dict):
+                default_th = float(dist_cfg.get("default", 0.7))
+                per_movie = dist_cfg.get("per_movie", {})
+                dist_th = float(per_movie.get(str(movie_key), default_th))
+            else:
+                dist_th = float(dist_cfg)
+
+            # Baseline Agglomerative clustering
+            aggl_clusterer = AgglomerativeClustering(
+                n_clusters=None,
+                distance_threshold=dist_th,
+                metric=clustering_cfg.get("metric", "cosine"),
+                linkage=clustering_cfg.get("linkage", "complete"),
+            )
+            aggl_labels = aggl_clusterer.fit_predict(emb_matrix)
+            n_aggl = len(set(aggl_labels))
+            sil_score = (
+                silhouette_score(
+                    emb_matrix, aggl_labels, metric=clustering_cfg.get("metric", "cosine")
+                )
+                if n_aggl > 1
+                else -1
+            )
+            print(
+                f"[DEBUG] Agglomerative produced {n_aggl} clusters (silhouette={sil_score:.3f})"
+            )
+
+            chosen_labels = aggl_labels
+            final_algo = "agglomerative"
+            final_clusters = n_aggl
+
+            if algo in {"auto", "hdbscan"}:
                 import hdbscan
 
-                clusterer = hdbscan.HDBSCAN(
-                    min_cluster_size=int(
-                        clustering_cfg.get("min_cluster_size", 5)
-                    ),
+                hdb_clusterer = hdbscan.HDBSCAN(
+                    min_cluster_size=int(clustering_cfg.get("min_cluster_size", 5)),
                     metric=clustering_cfg.get("metric", "euclidean"),
                 )
-                labels = clusterer.fit_predict(emb_matrix)
-            else:
-                clusterer = AgglomerativeClustering(
-                    n_clusters=None,
-                    distance_threshold=float(
-                        clustering_cfg.get("distance_threshold", 0.7)
-                    ),
-                    metric="cosine",
-                    linkage="complete",
+                hdb_labels = hdb_clusterer.fit_predict(emb_matrix)
+                n_hdb = len(set(hdb_labels)) - (1 if -1 in hdb_labels else 0)
+                outlier_ratio = float(np.mean(hdb_labels == -1))
+                print(
+                    f"[DEBUG] HDBSCAN produced {n_hdb} clusters (outliers={outlier_ratio:.2%})"
                 )
-                labels = clusterer.fit_predict(emb_matrix)
+
+                if algo == "hdbscan" or (
+                    algo == "auto" and (n_aggl <= 1 or sil_score < 0.2)
+                    and n_hdb > 0
+                    and outlier_ratio < 0.5
+                ):
+                    chosen_labels = hdb_labels
+                    final_algo = "hdbscan"
+                    final_clusters = n_hdb
+
+            if algo == "auto":
+                print(
+                    f"[INFO] Cluster count change: {n_aggl} -> {final_clusters} using {final_algo}"
+                )
         else:
-            labels = np.array([0])
+            chosen_labels = np.array([0])
+            final_clusters = 1
+            final_algo = algo
 
         group = group.copy()
-        group["cluster_id"] = [f"{movie_key}_{lbl}" for lbl in labels]
+        group["cluster_id"] = [f"{movie_key}_{lbl}" for lbl in chosen_labels]
         results.append(group)
 
     # Giữ lại TẤT CẢ các cột khi lưu kết quả
