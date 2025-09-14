@@ -61,6 +61,8 @@ def cluster_task():
 
     print(f"[INFO] Đã load {len(df_tracks)} track centroids để gom cụm.")
 
+    metric = clustering_cfg.get("metric", "cosine")
+
     # Gom cụm theo từng phim
     results = []
     for movie_key, group in df_tracks.groupby(group_col):
@@ -81,14 +83,14 @@ def cluster_task():
             aggl_clusterer = AgglomerativeClustering(
                 n_clusters=None,
                 distance_threshold=dist_th,
-                metric=clustering_cfg.get("metric", "cosine"),
+                metric=metric,
                 linkage=clustering_cfg.get("linkage", "complete"),
             )
             aggl_labels = aggl_clusterer.fit_predict(emb_matrix)
             n_aggl = len(set(aggl_labels))
             sil_score = (
                 silhouette_score(
-                    emb_matrix, aggl_labels, metric=clustering_cfg.get("metric", "cosine")
+                    emb_matrix, aggl_labels, metric=metric
                 )
                 if n_aggl > 1
                 else -1
@@ -104,9 +106,15 @@ def cluster_task():
             if algo in {"auto", "hdbscan"}:
                 import hdbscan
 
+                hdb_metric = metric if metric != "cosine" else "euclidean"
+                if metric == "cosine":
+                    print(
+                        "[WARN] HDBSCAN does not support cosine metric; falling back to euclidean."
+                    )
+
                 hdb_clusterer = hdbscan.HDBSCAN(
                     min_cluster_size=int(clustering_cfg.get("min_cluster_size", 5)),
-                    metric=clustering_cfg.get("metric", "euclidean"),
+                    metric=hdb_metric,
                 )
                 hdb_labels = hdb_clusterer.fit_predict(emb_matrix)
                 n_hdb = len(set(hdb_labels)) - (1 if -1 in hdb_labels else 0)
