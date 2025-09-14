@@ -4,20 +4,32 @@ import pandas as pd
 import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import cosine_similarity, pairwise_distances
 from prefect import task
 from utils.config_loader import load_config
 
-def filter_clusters(df: pd.DataFrame, min_det: float = 0.5, min_size: int = 3) -> pd.DataFrame:
-    stats = (
-        df.groupby("cluster_id")
-        .agg(median_det=("det_score", "median"), size=("track_id", "size"))
-    )
-    valid = stats[(stats["median_det"] >= min_det) & (stats["size"] >= min_size)].index
-    removed = len(stats) - len(valid)
+def filter_clusters(
+    df: pd.DataFrame,
+    min_track_size: int = 1,
+    min_cluster_size: int = 1,
+) -> pd.DataFrame:
+    """Filter out tracks and clusters that are too small."""
+
+    original_len = len(df)
+
+    if min_track_size > 1 and "track_size" in df.columns:
+        df = df[df["track_size"] >= min_track_size]
+
+    if min_cluster_size > 1:
+        counts = df.groupby("cluster_id")["track_id"].count()
+        valid_clusters = counts[counts >= min_cluster_size].index
+        df = df[df["cluster_id"].isin(valid_clusters)]
+
+    removed = original_len - len(df)
     if removed > 0:
-        print(f"[INFO] Filtered out {removed} low-quality clusters.")
-    return df[df["cluster_id"].isin(valid)].copy()
+        print(f"[INFO] Filtered out {removed} tracks/clusters based on config.")
+
+    return df.copy()
 
 
 @task(name="Cluster Faces Task")
@@ -71,20 +83,30 @@ def cluster_task():
         emb_matrix = np.array(group["track_centroid"].tolist(), dtype=np.float32)
 
         if len(group) > 1:
-            # Resolve distance threshold (global or per-movie) depending on embedding type
-            if pca_cfg.get("enable", False):
-                dist_cfg = clustering_cfg.get(
-                    "distance_threshold_pca",
-                    clustering_cfg.get("distance_threshold", 0.7),
+            # Determine distance threshold
+            auto_percentile = clustering_cfg.get("auto_distance_percentile")
+            dist_matrix = pairwise_distances(emb_matrix, metric=metric)
+            if auto_percentile is not None:
+                triu = dist_matrix[np.triu_indices(len(dist_matrix), k=1)]
+                dist_th = float(np.percentile(triu, auto_percentile))
+                print(
+                    f"[INFO] Inferred distance_threshold={dist_th:.4f} at p{auto_percentile}"
                 )
             else:
-                dist_cfg = clustering_cfg.get("distance_threshold", 0.7)
-            if isinstance(dist_cfg, dict):
-                default_th = float(dist_cfg.get("default", 0.7))
-                per_movie = dist_cfg.get("per_movie", {})
-                dist_th = float(per_movie.get(str(movie_key), default_th))
-            else:
-                dist_th = float(dist_cfg)
+                if pca_cfg.get("enable", False):
+                    dist_cfg = clustering_cfg.get(
+                        "distance_threshold_pca",
+                        clustering_cfg.get("distance_threshold", 0.7),
+                    )
+                else:
+                    dist_cfg = clustering_cfg.get("distance_threshold", 0.7)
+                if isinstance(dist_cfg, dict):
+                    default_th = float(dist_cfg.get("default", 0.7))
+                    per_movie = dist_cfg.get("per_movie", {})
+                    dist_th = float(per_movie.get(str(movie_key), default_th))
+                else:
+                    dist_th = float(dist_cfg)
+                print(f"[INFO] Using configured distance_threshold={dist_th:.4f}")
 
             # Baseline Agglomerative clustering
             aggl_clusterer = AgglomerativeClustering(
@@ -96,9 +118,7 @@ def cluster_task():
             aggl_labels = aggl_clusterer.fit_predict(emb_matrix)
             n_aggl = len(set(aggl_labels))
             sil_score = (
-                silhouette_score(
-                    emb_matrix, aggl_labels, metric=metric
-                )
+                silhouette_score(emb_matrix, aggl_labels, metric=metric)
                 if n_aggl > 1
                 else -1
             )
@@ -113,16 +133,27 @@ def cluster_task():
             if algo in {"auto", "hdbscan"}:
                 import hdbscan
 
-                # Precompute cosine distance matrix for HDBSCAN
-                dist_matrix = 1 - cosine_similarity(emb_matrix)
-
                 hdbscan_cfg = clustering_cfg.get("hdbscan", {})
-                hdb_clusterer = hdbscan.HDBSCAN(
-                    min_cluster_size=int(hdbscan_cfg.get("min_cluster_size", 5)),
-                    min_samples=int(hdbscan_cfg.get("min_samples", 5)),
-                    metric="precomputed",
-                )
-                hdb_labels = hdb_clusterer.fit_predict(dist_matrix)
+                if hdbscan_cfg.get("use_precomputed", False):
+                    dist_hdb = 1 - cosine_similarity(emb_matrix)
+                    hdb_clusterer = hdbscan.HDBSCAN(
+                        min_cluster_size=int(
+                            hdbscan_cfg.get("min_cluster_size", 5)
+                        ),
+                        min_samples=int(hdbscan_cfg.get("min_samples", 5)),
+                        metric="precomputed",
+                    )
+                    hdb_labels = hdb_clusterer.fit_predict(dist_hdb)
+                else:
+                    hdb_clusterer = hdbscan.HDBSCAN(
+                        min_cluster_size=int(
+                            hdbscan_cfg.get("min_cluster_size", 5)
+                        ),
+                        min_samples=int(hdbscan_cfg.get("min_samples", 5)),
+                        metric=metric,
+                    )
+                    hdb_labels = hdb_clusterer.fit_predict(emb_matrix)
+
                 n_hdb = len(set(hdb_labels)) - (1 if -1 in hdb_labels else 0)
                 outlier_ratio = float(np.mean(hdb_labels == -1))
                 print(
@@ -130,7 +161,8 @@ def cluster_task():
                 )
 
                 if algo == "hdbscan" or (
-                    algo == "auto" and (n_aggl <= 1 or sil_score < 0.2)
+                    algo == "auto"
+                    and (n_aggl <= 1 or sil_score < 0.2)
                     and n_hdb > 0
                     and outlier_ratio < 0.5
                 ):
@@ -153,7 +185,12 @@ def cluster_task():
 
     # Giữ lại TẤT CẢ các cột khi lưu kết quả và lọc các cụm chất lượng thấp
     clusters_df = pd.concat(results, ignore_index=True)
-    clusters_df = filter_clusters(clusters_df)
+    filter_cfg = config.get("filter", {})
+    clusters_df = filter_clusters(
+        clusters_df,
+        min_track_size=int(filter_cfg.get("min_track_size", 1)),
+        min_cluster_size=int(filter_cfg.get("min_cluster_size", 1)),
+    )
 
     # Logic thống kê
     unique_labels, counts = np.unique(clusters_df["cluster_id"], return_counts=True)

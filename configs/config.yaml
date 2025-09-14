@@ -33,10 +33,12 @@ clustering:
   algo: "agglomerative"        # tạm bỏ auto/HDBSCAN cho ổn định
   metric: "euclidean"          # tránh fallback khó kiểm soát
   linkage: "complete"
+  auto_distance_percentile: 95
   distance_threshold:
     default: 0.43              # cho 256-D PCA + L2
   distance_threshold_pca: 0.9
   hdbscan:
+    use_precomputed: true
     min_cluster_size: 5
     min_samples: 5
 
@@ -44,7 +46,11 @@ post_merge:
   enable: true
   metric: "euclidean"          # thống nhất với trên
   linkage: "average"
-  distance_threshold: 0.45     # NGUYÊN NHÂN CHÍNH khiến còn 2–4 người
+  distance_threshold: 0.55     # NGUYÊN NHÂN CHÍNH khiến còn 2–4 người
+
+filter:
+  min_track_size: 5
+  min_cluster_size: 3
 
 filter_clusters:
   min_size: 6

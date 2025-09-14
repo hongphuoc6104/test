@@ -44,10 +44,13 @@ def character_task():
     centroid_vectors = np.array([l2_normalize(v) for v in centroid_vectors])
     # === BƯỚC 3: Gom cụm tầng hai (Post-merge) ===
     if post_merge_cfg.get("enable", False):
-        print("[Character] Post-merging enabled. Clustering centroids...")
+        distance_th = float(post_merge_cfg.get("distance_threshold", 0.35))
+        print(
+            f"[Character] Post-merging enabled (distance_threshold={distance_th}). Clustering centroids..."
+        )
         clusterer = AgglomerativeClustering(
             n_clusters=None,
-            distance_threshold=float(post_merge_cfg.get("distance_threshold", 0.35)),
+            distance_threshold=distance_th,
             metric=post_merge_cfg.get("metric", "cosine"),
             linkage=post_merge_cfg.get("linkage", "average"),
         )
@@ -100,6 +103,11 @@ def character_task():
     with open(output_json_path, "w", encoding="utf-8") as f:
         json.dump(characters, f, indent=2, ensure_ascii=False)
 
+    before_merge = len(base_cluster_ids)
+    after_merge = df["final_character_id"].nunique()
+    print(
+        f"[Character] Clusters before merge: {before_merge}, after merge: {after_merge}"
+    )
     print(f"[Character] Saved {len(characters)} character profiles to {output_json_path}")
 
     # Lọc các cụm kém chất lượng trước khi xây dựng index
