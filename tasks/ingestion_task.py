@@ -7,9 +7,12 @@ from utils.config_loader import load_config
 
 
 # Bộ phân loại khuôn mặt Haar để ước lượng số lượng khuôn mặt trong khung hình
-face_cascade = cv.CascadeClassifier(
-    cv.data.haarcascades + "haarcascade_frontalface_default.xml"
-)
+try:
+    face_cascade = cv.CascadeClassifier(
+        cv.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
+except AttributeError:
+    face_cascade = None
 
 
 def extract_frames(video_path, root_output_folder):
@@ -53,13 +56,21 @@ def extract_frames(video_path, root_output_folder):
             frame_filename = os.path.join(
                 output_folder_for_movie, f"frame_{saved_frame_count:07d}.jpg"
             )
-            gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-            faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+            if face_cascade is not None:
+                gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+                faces = face_cascade.detectMultiScale(
+                    gray, scaleFactor=1.1, minNeighbors=5
+                )
+            else:
+                faces = []
             cv.imwrite(frame_filename, frame)
             saved_frame_count += 1
 
             # Nếu cảnh có ít khuôn mặt, tăng tần suất lấy mẫu cho khung hình tiếp theo
-            current_interval = fast_interval if len(faces) < min_faces else default_interval
+            if face_cascade is not None:
+                current_interval = (
+                    fast_interval if len(faces) < min_faces else default_interval
+                )
         frame_count += 1
 
     cap.release()
@@ -106,7 +117,7 @@ def ingestion_task():
         if os.path.isdir(output_folder_for_movie) and len(os.listdir(output_folder_for_movie)) > 0:
             print(f"Video '{video_name}' có vẻ đã được trích xuất frames trước đó. Bỏ qua.")
             if video_name not in all_metadata:
-                print(f"Cảnh báo: Thiếu metadata cho phim '{video_name}'. Sẽ cố gắng tạo lại.")
+                print(f"Cnh báo: Thiếu metadata cho phim '{video_name}'. Sẽ cố gng tạo lại.")
                 cap = cv.VideoCapture(video_path)
                 if cap.isOpened():
                     fps = cap.get(cv.CAP_PROP_FPS)
