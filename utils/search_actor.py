@@ -34,34 +34,15 @@ def search_actor(
     min_count: int = 0,
     return_emb: bool = False,
 ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
-    """Find the closest characters in the index based on an image.
-
-    Parameters
-    ----------
-    image_path: str
-        Path to the image containing a face.
-    k: int, optional
-        Number of top matches to retrieve.
-    return_emb: bool, optional
-        If ``True``, return the computed embedding and a search function
-        instead of querying the index immediately.
-
-    Returns
-    -------
-    When ``return_emb`` is ``False`` (default)
-        A list of match dictionaries containing ``character_id``, ``movies``
-        and ``distance``.
-    When ``return_emb`` is ``True``
-        A dictionary with keys:
-            ``embedding`` - the computed embedding as a list.
-            ``search_func`` - callable accepting an embedding and returning
-            search results.
-    """
+    """Find the closest characters in the index based on an image."""
     cfg = load_config()
     emb_cfg = cfg["embedding"]
     storage_cfg = cfg["storage"]
+    pca_cfg = cfg.get("pca", {})
+    index_cfg = cfg.get("index", {})
 
     index, id_map = load_index()
+    index_type = str(index_cfg.get("type", "")).lower()
 
     app = FaceAnalysis(name=emb_cfg["model"], providers=emb_cfg["providers"])
     app.prepare(ctx_id=0, det_size=(640, 640))
@@ -74,12 +55,33 @@ def search_actor(
     if not faces:
         return {} if return_emb else []
 
+    # lấy mặt có det_score cao nhất
     faces.sort(key=lambda f: f.det_score, reverse=True)
-    emb = faces[0].embedding
+    emb = faces[0].embedding.astype("float32")
+
+    # normalize trước PCA (embedding gốc thường đã chuẩn)
     if emb_cfg.get("l2_normalize", True):
         emb = l2_normalize(emb)
 
-    emb = np.asarray([emb], dtype="float32")
+    # nếu index đang ở chiều khác, cố gắng áp PCA để khớp
+    index_dim = getattr(index, "d", emb.shape[0])  # FAISS có .d; Annoy không có
+    if pca_cfg.get("enable", False) or emb.shape[0] != index_dim:
+        try:
+            from joblib import load
+            pca_path = storage_cfg.get("pca_model", "models/pca_model.joblib")
+            if os.path.exists(pca_path):
+                pca = load(pca_path)
+                emb = pca.transform(emb.reshape(1, -1)).astype("float32")[0]
+        except Exception:
+            # nếu có lỗi khi load/transform PCA, giữ nguyên emb
+            pass
+
+    # sau PCA, norm bị thay đổi -> normalize lại nếu dùng IP/cosine
+    if "ip" in index_type:
+        emb = l2_normalize(emb)
+
+    emb = emb.reshape(1, -1).astype("float32")
+
     with open(storage_cfg["characters_json"], "r", encoding="utf-8") as f:
         characters = json.load(f)
 
@@ -89,8 +91,16 @@ def search_actor(
         """Search the loaded index using the provided embedding."""
         q = np.asarray(query_emb, dtype="float32")
         if q.ndim == 1:
-            q = np.asarray([q], dtype="float32")
+            q = q[None, :]
+
+        # đảm bảo normalize khi index là inner-product (cosine)
+        if "ip" in index_type:
+            # normalize theo hàng
+            norms = np.linalg.norm(q, axis=1, keepdims=True) + 1e-12
+            q = q / norms
+
         distances, indices = _query_index(index, q, top_k)
+
         results: List[Dict[str, Any]] = []
         for dist, idx in zip(distances, indices):
             char_id = str(id_map.get(int(idx), idx))
