@@ -42,6 +42,9 @@ clustering:
     min_cluster_size: 5
     min_samples: 5
 
+merge:
+  global_threshold: 0.78       # cosine similarity threshold for global merge
+
 post_merge:
   enable: true
   metric: "euclidean"          # thống nhất với trên
