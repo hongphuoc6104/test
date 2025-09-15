@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Callable, Dict, List, Union
+import os
+from typing import Any, Dict, List, Union
 
 import cv2
 import numpy as np
@@ -98,12 +99,24 @@ def search_actor(
             count = char_info.get("count", 0)
             if count < min_count:
                 continue
+
+            rep_image = char_info.get("rep_image")
+            preview_paths = char_info.get("preview_paths", [])
+            # ensure preview paths are absolute
+            previews_root = storage_cfg.get("cluster_previews_root", "")
+            preview_paths = [
+                p if os.path.isabs(p) else os.path.join(previews_root, p)
+                for p in preview_paths
+            ]
+
             results.append(
                 {
                     "character_id": char_id,
                     "movies": movies,
                     "distance": float(dist),
                     "count": count,
+                    "rep_image": rep_image,
+                    "preview_paths": preview_paths,
                 }
             )
         return results
