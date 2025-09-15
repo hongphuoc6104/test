@@ -27,21 +27,12 @@ def _decide_matches(
     if not matches:
         return {"recognized": False, "matches": []}
 
-    sims = [m.get("distance", 0.0) for m in matches]
-    sim_top1 = sims[0]
-    sim_top2 = sims[1] if len(sims) > 1 else float("-inf")
+    filtered = [m for m in matches if m.get("distance", 0.0) >= sim_threshold]
 
-    if sim_top1 < sim_threshold:
-        return {"recognized": False, "matches": matches}
+    if filtered:
+        return {"recognized": True, "matches": filtered}
 
-    eps = 1e-8
-    if sim_top1 / max(sim_top2, eps) < ratio_threshold:
-        return {"recognized": False, "matches": matches}
-
-    if (sim_top1 - sim_top2) < margin_threshold:
-        return {"recognized": False, "matches": matches}
-
-    return {"recognized": True, "matches": [matches[0]]}
+    return {"recognized": False, "matches": matches}
 
 
 def run(
@@ -49,8 +40,8 @@ def run(
     sim_threshold: float,
     ratio_threshold: float,
     margin_threshold: float,
-    top_k: int,
-    min_count: int,
+    top_k: int = 20,
+    min_count: int = 0,
 ) -> Dict[str, Any]:
     if not os.path.exists(image_path):
         return {"error": f"Image not found: {image_path}"}
@@ -119,7 +110,7 @@ def main() -> None:
     parser.add_argument(
         "--top-k",
         type=int,
-        default=max(2, search_cfg.get("knn", 5)),
+        default=max(2, search_cfg.get("knn", 20)),
         help="Number of top matches to retrieve",
     )
     parser.add_argument(
