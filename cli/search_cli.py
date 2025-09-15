@@ -13,6 +13,7 @@ def main():
     pca_cfg = cfg.get("pca", {})
     storage_cfg = cfg.get("storage", {})
     search_cfg = cfg.get("search", {})
+    frames_root = storage_cfg.get("frames_root", "")
 
     default_sim_threshold = search_cfg.get("sim_threshold", 0.5)
     default_margin_threshold = search_cfg.get("margin_threshold", 0.05)
@@ -110,7 +111,8 @@ def main():
             movie = rep.get("movie", "")
             frame = rep.get("frame", "")
             bbox = rep.get("bbox", [])
-            print(f"  Representative frame: {movie}/{frame} bbox={bbox}")
+            path = os.path.join(frames_root, movie, frame) if movie and frame else ""
+            print(f"  Representative frame: {path} bbox={bbox}")
 
 
 if __name__ == "__main__":

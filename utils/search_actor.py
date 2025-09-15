@@ -100,7 +100,7 @@ def search_actor(
             if count < min_count:
                 continue
 
-            rep_image = char_info.get("rep_image")
+            rep_image = char_info.get("rep_image", {})
             preview_paths = char_info.get("preview_paths", [])
             # ensure preview paths are absolute
             previews_root = storage_cfg.get("cluster_previews_root", "")

@@ -36,7 +36,15 @@ def main() -> None:
         for cand in candidates:
             movies = ", ".join(cand.get("movies", []))
             print(f"Candidate {cand['character_id']} - Movies: {movies}")
-            _display(str(cand["character_id"]), cand.get("preview_paths", []))
+            images: List[str] = []
+            rep = cand.get("rep_image")
+            if rep:
+                movie = rep.get("movie")
+                frame = rep.get("frame")
+                if movie and frame:
+                    images.append(os.path.join(frames_root, movie, frame))
+            images.extend(cand.get("preview_paths", []))
+            _display(str(cand["character_id"]), images)
     else:
         print("Recognized face. Showing frames by movie...")
         for cand in candidates:
