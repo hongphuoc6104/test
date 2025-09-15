@@ -1,9 +1,10 @@
+import os
+
 import numpy as np
 import pandas as pd
-from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics.pairwise import cosine_similarity
 from prefect import task
 from utils.config_loader import load_config
+from utils.vector_utils import l2_normalize
 
 
 class UnionFind:
@@ -40,10 +41,11 @@ def merge_clusters_task(sim_threshold: float | None = None):
     Steps:
     1. Load clustered track data.
     2. Compute centroid for each cluster together with its ``movie_id``.
-    3. Compute pairwise cosine distance between centroids and cluster them
-       using Agglomerative clustering.
-    4. Use Union-Find to merge ``cluster_id`` across all movies.
-    5. Save the merged results back to the warehouse and log stats.
+    3. Build a global FAISS/Annoy index over centroids and connect
+       clusters whose cosine similarity passes the configured threshold.
+    4. Use Union-Find to merge ``cluster_id`` across all movies and
+       assign a stable ``final_character_id``.
+    5. Persist both the per-track assignments and the aggregated mapping.
     """
 
     print("\n--- Starting Merge Clusters Task ---")
@@ -75,35 +77,96 @@ def merge_clusters_task(sim_threshold: float | None = None):
         .reset_index()
     )
 
-    centroid_matrix = np.stack(centroids["centroid"].to_list())
-    dist_matrix = 1 - cosine_similarity(centroid_matrix)
+    centroid_vectors = np.stack(centroids["centroid"].to_list()).astype("float32")
+    centroid_vectors = np.array([l2_normalize(v) for v in centroid_vectors])
 
-    if len(centroids) > 1:
-        clusterer = AgglomerativeClustering(
-            n_clusters=None,
-            metric="precomputed",
-            linkage="average",
-            distance_threshold=1 - float(sim_threshold),
-        )
-        labels = clusterer.fit_predict(dist_matrix)
+    n_centroids = len(centroid_vectors)
+    if n_centroids == 0:
+        print("[Merge] No centroids to merge. Skipping.")
+        return clusters_path
+
+    if n_centroids == 1:
+        mapping = {centroids.loc[0, "cluster_id"]: 0}
+        df["final_character_id"] = df["cluster_id"].map(mapping)
     else:
-        labels = np.zeros(len(centroids), dtype=int)
+        knn = int(merge_cfg.get("knn", min(64, n_centroids)))
+        knn = max(2, min(knn, n_centroids))
 
-    centroids["merge_label"] = labels
+        neighbors: list[list[tuple[int, float]]] = []
+        index_type = "brute-force"
 
-    # Union-Find to merge cluster IDs with same label
-    uf = UnionFind(centroids["cluster_id"].tolist())
-    for _, group in centroids.groupby("merge_label"):
-        ids = group["cluster_id"].tolist()
-        root = ids[0]
-        for cid in ids[1:]:
-            uf.union(root, cid)
+        try:
+            import faiss  # type: ignore
 
-    groups = uf.groups()
-    mapping: dict[str, int] = {}
-    for new_id, ids in enumerate(groups.values()):
-        for cid in ids:
-            mapping[cid] = new_id
+            index = faiss.IndexFlatIP(centroid_vectors.shape[1])
+            index.add(centroid_vectors)
+            sim_scores, sim_indices = index.search(centroid_vectors, knn)
+            for sims, idxs in zip(sim_scores, sim_indices):
+                neighbors.append(list(zip(idxs.tolist(), sims.tolist())))
+            index_type = "FAISS"
+        except Exception as exc:
+            print(f"[Merge] Failed to build FAISS index ({exc}). Trying Annoy...")
+            try:
+                from annoy import AnnoyIndex  # type: ignore
+
+                dim = centroid_vectors.shape[1]
+                annoy_trees = int(merge_cfg.get("annoy_trees", 50))
+                annoy_index = AnnoyIndex(dim, "angular")
+                for idx, vec in enumerate(centroid_vectors):
+                    annoy_index.add_item(idx, vec)
+                annoy_index.build(annoy_trees)
+                for vec in centroid_vectors:
+                    idxs, dists = annoy_index.get_nns_by_vector(
+                        vec, knn, include_distances=True
+                    )
+                    sims = [1 - 0.5 * (dist ** 2) for dist in dists]
+                    neighbors.append(list(zip(idxs, sims)))
+                index_type = "Annoy"
+            except Exception as ann_exc:
+                print(
+                    "[Merge] Failed to build Annoy index "
+                    f"({ann_exc}). Falling back to brute-force search."
+                )
+                neighbors = []
+
+        if not neighbors:
+            similarity = centroid_vectors @ centroid_vectors.T
+            for sims in similarity:
+                idxs = np.argsort(-sims)[:knn]
+                neighbors.append(list(zip(idxs.tolist(), sims[idxs].tolist())))
+
+        print(
+            f"[Merge] Built {index_type} index for {n_centroids} centroids (k={knn})."
+        )
+
+        uf = UnionFind(centroids["cluster_id"].tolist())
+        centroid_ids = centroids["cluster_id"].tolist()
+        for src_idx, nbrs in enumerate(neighbors):
+            src_id = centroid_ids[src_idx]
+            for dst_idx, sim in nbrs:
+                if dst_idx < 0 or dst_idx >= n_centroids:
+                    continue
+                if dst_idx == src_idx:
+                    continue
+                if sim < sim_threshold:
+                    continue
+                dst_id = centroid_ids[dst_idx]
+                uf.union(src_id, dst_id)
+
+        root_to_final: dict[str, int] = {}
+        mapping = {}
+        next_id = 0
+        for cid in centroid_ids:
+            root = uf.find(cid)
+            if root not in root_to_final:
+                root_to_final[root] = next_id
+                next_id += 1
+            mapping[cid] = root_to_final[root]
+
+    centroids["final_character_id"] = centroids["cluster_id"].map(mapping)
+    centroids["centroid"] = centroids["centroid"].apply(
+        lambda v: v.tolist() if isinstance(v, np.ndarray) else v
+    )
 
     df["final_character_id"] = df["cluster_id"].map(mapping)
 
@@ -112,4 +175,11 @@ def merge_clusters_task(sim_threshold: float | None = None):
 
     df.to_parquet(clusters_path, index=False)
     print(f"[Merge] Saved merged clusters to {clusters_path}")
+
+    merged_output = storage_cfg.get("clusters_merged_parquet")
+    if merged_output:
+        os.makedirs(os.path.dirname(merged_output), exist_ok=True)
+        centroids.to_parquet(merged_output, index=False)
+        print(f"[Merge] Saved centroid mapping to {merged_output}")
+
     return clusters_path

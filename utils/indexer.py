@@ -38,9 +38,17 @@ def build_index(characters_json: str, index_path: str) -> None:
     # Nếu có file parquet đã merge, dùng để tính centroid
     if merged_path and os.path.exists(merged_path):
         df = pd.read_parquet(merged_path)
+
+        def _as_array(value: Any) -> np.ndarray:
+            arr = np.asarray(value, dtype="float32")
+            if arr.ndim == 1:
+                return arr
+            return arr.ravel()
+
+        column = "centroid" if "centroid" in df.columns else "emb"
         grouped = (
-            df.groupby("final_character_id")["emb"].apply(
-                lambda embs: _mean_vector(embs.tolist())
+            df.groupby("final_character_id")[column].apply(
+                lambda rows: _mean_vector([_as_array(v) for v in rows])
             )
         )
         for char_id in characters.keys():
