@@ -90,3 +90,7 @@ index:
 
 logging:
   mlflow_experiment: "face_discovery_mvp"
+
+search:
+  threshold: 0.45
+  top_k: 5
