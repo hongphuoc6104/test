@@ -21,7 +21,9 @@ def test_pipeline_creates_index(tmp_path, monkeypatch):
     prefect_stub.task = _decorator
     monkeypatch.setitem(sys.modules, "prefect", prefect_stub)
 
-    monkeypatch.setitem(sys.modules, "yaml", types.ModuleType("yaml"))
+    yaml_mod = types.ModuleType("yaml")
+    yaml_mod.safe_load = lambda f: {}
+    monkeypatch.setitem(sys.modules, "yaml", yaml_mod)
     monkeypatch.setitem(sys.modules, "cv2", types.ModuleType("cv2"))
     numpy_mod = types.ModuleType("numpy")
     numpy_mod.ndarray = object
@@ -39,9 +41,16 @@ def test_pipeline_creates_index(tmp_path, monkeypatch):
     class DummyPCA:
         pass
     decomp_mod.PCA = DummyPCA
+    metrics_mod = types.ModuleType("sklearn.metrics")
+    metrics_mod.silhouette_score = lambda *a, **k: 0.0
+    pairwise_mod = types.ModuleType("sklearn.metrics.pairwise")
+    pairwise_mod.cosine_similarity = lambda *a, **k: 0.0
+    pairwise_mod.pairwise_distances = lambda *a, **k: 0.0
     monkeypatch.setitem(sys.modules, "sklearn", sklearn_stub)
     monkeypatch.setitem(sys.modules, "sklearn.cluster", cluster_mod)
     monkeypatch.setitem(sys.modules, "sklearn.decomposition", decomp_mod)
+    monkeypatch.setitem(sys.modules, "sklearn.metrics", metrics_mod)
+    monkeypatch.setitem(sys.modules, "sklearn.metrics.pairwise", pairwise_mod)
     monkeypatch.setitem(sys.modules, "pyarrow", types.ModuleType("pyarrow"))
     monkeypatch.setitem(sys.modules, "pyarrow.parquet", types.ModuleType("pyarrow.parquet"))
     monkeypatch.setitem(sys.modules, "joblib", types.ModuleType("joblib"))
@@ -70,6 +79,7 @@ def test_pipeline_creates_index(tmp_path, monkeypatch):
     monkeypatch.setattr(pipeline, "embedding_task", dummy)
     monkeypatch.setattr(pipeline, "build_warehouse_task", dummy)
     monkeypatch.setattr(pipeline, "validate_warehouse_task", dummy)
+    monkeypatch.setattr(pipeline, "validate_clusters_task", dummy)
     monkeypatch.setattr(pipeline, "pca_task", dummy)
     monkeypatch.setattr(pipeline, "cluster_task", dummy)
     monkeypatch.setattr(pipeline, "merge_clusters_task", dummy)
@@ -97,3 +107,4 @@ def test_pipeline_creates_index(tmp_path, monkeypatch):
 
     assert os.path.exists(storage["index_path"])
     assert os.path.exists(storage["index_map"])
+

@@ -37,7 +37,8 @@ def _setup_env(tmp_path, monkeypatch, rep_image=None):
     monkeypatch.setattr(sa, "load_config", lambda: cfg)
     monkeypatch.setattr(sa, "load_index", lambda: (object(), {0: 0}))
     monkeypatch.setattr(sa, "_query_index", lambda idx, e, k: (np.array([0.1]), np.array([0])))
-
+    # ensure search_actor uses our dummy cv2 regardless of prior imports
+    monkeypatch.setattr(sa, "cv2", cv2)
     data = {"0": {"movies": ["movie1"]}}
     if rep_image is not None:
         data["0"]["rep_image"] = rep_image

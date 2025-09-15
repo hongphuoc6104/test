@@ -1,8 +1,17 @@
-import pandas as pd
-import numpy as np
+import pytest
+
+pytest.importorskip("pandas")
+pytest.importorskip("numpy")
+pytest.importorskip("sklearn")
+pytest.importorskip("prefect")
+pytest.importorskip("yaml")
+
 from sklearn.cluster import AgglomerativeClustering
 from prefect import task
 from utils.config_loader import load_config
+
+import numpy as np
+import pandas as pd
 
 
 def filter_clusters(df: 'pd.DataFrame', min_det: float = 0.5, min_size: int = 3) -> 'pd.DataFrame':
