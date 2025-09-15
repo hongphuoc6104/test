@@ -12,7 +12,7 @@ models/
 warehouse/*
 !warehouse/__init__.py
 !warehouse/update_pipeline.py
-
+!warehouse/characters.json
 
 # Data & models (không đưa dữ liệu & weight nặng lên git)
 *.h5

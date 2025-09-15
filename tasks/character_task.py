@@ -87,9 +87,21 @@ def character_task():
                     if f.lower().endswith((".jpg", ".png"))
                 ]
 
+        # Thu thập danh sách movie_id trong tất cả các cluster đã hợp nhất
+        movie_ids: list[int] = []
+        if "movie_id" in group.columns:
+            movie_ids = sorted(group["movie_id"].unique().tolist())
+
         characters[str(int(char_id))] = {
             "count": int(len(group)),
-            "movies": sorted(group["movie"].unique().tolist()),
+            # Giữ lại trường movies cũ nếu cột movie tồn tại
+            "movies": (
+                sorted(group["movie"].unique().tolist())
+                if "movie" in group.columns
+                else []
+            ),
+            # Trường mới chứa danh sách các movie_id đã hợp nhất
+            "movie_ids": movie_ids,
             "rep_image": {
                 "movie": rep["movie"],
                 "frame": rep["frame"],

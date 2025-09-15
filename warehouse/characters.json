@@ -1,0 +1,2637 @@
+{
+  "0": {
+    "count": 244,
+    "movies": [
+      "DENAMHON",
+      "GAIGIALAMCHIEU",
+      "KEANDANH",
+      "NGUOIVOCUOICUNG",
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      0,
+      1,
+      3,
+      4,
+      5
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0008060.jpg",
+      "bbox": [
+        445,
+        720,
+        530,
+        813
+      ],
+      "det_score": 0.8746261596679688
+    },
+    "preview_paths": []
+  },
+  "1": {
+    "count": 225,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0005458.jpg",
+      "bbox": [
+        731,
+        307,
+        821,
+        421
+      ],
+      "det_score": 0.9178526401519775
+    },
+    "preview_paths": []
+  },
+  "2": {
+    "count": 318,
+    "movies": [
+      "KEANDANH",
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      3,
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0004438.jpg",
+      "bbox": [
+        1215,
+        300,
+        1285,
+        391
+      ],
+      "det_score": 0.9180790781974792
+    },
+    "preview_paths": []
+  },
+  "3": {
+    "count": 26,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0002358.jpg",
+      "bbox": [
+        393,
+        216,
+        544,
+        409
+      ],
+      "det_score": 0.898202121257782
+    },
+    "preview_paths": []
+  },
+  "4": {
+    "count": 15,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0000360.jpg",
+      "bbox": [
+        689,
+        387,
+        806,
+        521
+      ],
+      "det_score": 0.8994592428207397
+    },
+    "preview_paths": []
+  },
+  "5": {
+    "count": 37,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0004644.jpg",
+      "bbox": [
+        1488,
+        204,
+        1593,
+        322
+      ],
+      "det_score": 0.9290727376937866
+    },
+    "preview_paths": []
+  },
+  "6": {
+    "count": 10,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0006610.jpg",
+      "bbox": [
+        1124,
+        281,
+        1202,
+        391
+      ],
+      "det_score": 0.9010342359542847
+    },
+    "preview_paths": []
+  },
+  "7": {
+    "count": 15,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0006763.jpg",
+      "bbox": [
+        1440,
+        251,
+        1623,
+        489
+      ],
+      "det_score": 0.9002242088317871
+    },
+    "preview_paths": []
+  },
+  "8": {
+    "count": 18,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0006490.jpg",
+      "bbox": [
+        912,
+        291,
+        987,
+        381
+      ],
+      "det_score": 0.9016738533973694
+    },
+    "preview_paths": []
+  },
+  "9": {
+    "count": 110,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0005302.jpg",
+      "bbox": [
+        523,
+        261,
+        688,
+        482
+      ],
+      "det_score": 0.9206914901733398
+    },
+    "preview_paths": []
+  },
+  "10": {
+    "count": 18,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0002816.jpg",
+      "bbox": [
+        355,
+        308,
+        437,
+        402
+      ],
+      "det_score": 0.8771330714225769
+    },
+    "preview_paths": []
+  },
+  "11": {
+    "count": 45,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0003912.jpg",
+      "bbox": [
+        339,
+        482,
+        417,
+        569
+      ],
+      "det_score": 0.9052733778953552
+    },
+    "preview_paths": []
+  },
+  "12": {
+    "count": 18,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0004734.jpg",
+      "bbox": [
+        1086,
+        436,
+        1282,
+        675
+      ],
+      "det_score": 0.9090719819068909
+    },
+    "preview_paths": []
+  },
+  "13": {
+    "count": 21,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0006886.jpg",
+      "bbox": [
+        963,
+        313,
+        1049,
+        430
+      ],
+      "det_score": 0.8986256122589111
+    },
+    "preview_paths": []
+  },
+  "14": {
+    "count": 38,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0002987.jpg",
+      "bbox": [
+        741,
+        359,
+        937,
+        594
+      ],
+      "det_score": 0.9079744815826416
+    },
+    "preview_paths": []
+  },
+  "15": {
+    "count": 33,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0002966.jpg",
+      "bbox": [
+        873,
+        328,
+        1042,
+        536
+      ],
+      "det_score": 0.9167668223381042
+    },
+    "preview_paths": []
+  },
+  "16": {
+    "count": 21,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0000820.jpg",
+      "bbox": [
+        626,
+        323,
+        720,
+        452
+      ],
+      "det_score": 0.8882808089256287
+    },
+    "preview_paths": []
+  },
+  "17": {
+    "count": 84,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0002336.jpg",
+      "bbox": [
+        305,
+        303,
+        433,
+        473
+      ],
+      "det_score": 0.906681478023529
+    },
+    "preview_paths": []
+  },
+  "18": {
+    "count": 24,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0000680.jpg",
+      "bbox": [
+        1118,
+        240,
+        1318,
+        522
+      ],
+      "det_score": 0.8773560523986816
+    },
+    "preview_paths": []
+  },
+  "19": {
+    "count": 21,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0000775.jpg",
+      "bbox": [
+        563,
+        330,
+        637,
+        424
+      ],
+      "det_score": 0.9047678112983704
+    },
+    "preview_paths": []
+  },
+  "20": {
+    "count": 16,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0005544.jpg",
+      "bbox": [
+        635,
+        244,
+        735,
+        388
+      ],
+      "det_score": 0.8693801164627075
+    },
+    "preview_paths": []
+  },
+  "21": {
+    "count": 25,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0002357.jpg",
+      "bbox": [
+        500,
+        281,
+        673,
+        500
+      ],
+      "det_score": 0.9152651429176331
+    },
+    "preview_paths": []
+  },
+  "22": {
+    "count": 9,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0000297.jpg",
+      "bbox": [
+        549,
+        322,
+        623,
+        411
+      ],
+      "det_score": 0.8491311073303223
+    },
+    "preview_paths": []
+  },
+  "23": {
+    "count": 20,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0001506.jpg",
+      "bbox": [
+        1317,
+        359,
+        1414,
+        486
+      ],
+      "det_score": 0.8480149507522583
+    },
+    "preview_paths": []
+  },
+  "24": {
+    "count": 32,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0008101.jpg",
+      "bbox": [
+        562,
+        335,
+        701,
+        486
+      ],
+      "det_score": 0.9117666482925415
+    },
+    "preview_paths": []
+  },
+  "25": {
+    "count": 117,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0004070.jpg",
+      "bbox": [
+        1405,
+        357,
+        1586,
+        571
+      ],
+      "det_score": 0.9227626323699951
+    },
+    "preview_paths": []
+  },
+  "26": {
+    "count": 27,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0008323.jpg",
+      "bbox": [
+        757,
+        259,
+        841,
+        373
+      ],
+      "det_score": 0.9027605652809143
+    },
+    "preview_paths": []
+  },
+  "27": {
+    "count": 12,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0001337.jpg",
+      "bbox": [
+        1046,
+        377,
+        1116,
+        475
+      ],
+      "det_score": 0.9041301608085632
+    },
+    "preview_paths": []
+  },
+  "28": {
+    "count": 21,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0006191.jpg",
+      "bbox": [
+        930,
+        239,
+        1004,
+        334
+      ],
+      "det_score": 0.8041831851005554
+    },
+    "preview_paths": []
+  },
+  "29": {
+    "count": 14,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0004730.jpg",
+      "bbox": [
+        1605,
+        356,
+        1690,
+        465
+      ],
+      "det_score": 0.9144278168678284
+    },
+    "preview_paths": []
+  },
+  "30": {
+    "count": 11,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0002142.jpg",
+      "bbox": [
+        1141,
+        151,
+        1216,
+        247
+      ],
+      "det_score": 0.9231709837913513
+    },
+    "preview_paths": []
+  },
+  "31": {
+    "count": 15,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0005291.jpg",
+      "bbox": [
+        1522,
+        651,
+        1598,
+        740
+      ],
+      "det_score": 0.8536268472671509
+    },
+    "preview_paths": []
+  },
+  "32": {
+    "count": 13,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0000193.jpg",
+      "bbox": [
+        859,
+        298,
+        1006,
+        484
+      ],
+      "det_score": 0.910999596118927
+    },
+    "preview_paths": []
+  },
+  "33": {
+    "count": 14,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0005300.jpg",
+      "bbox": [
+        677,
+        293,
+        840,
+        510
+      ],
+      "det_score": 0.9035486578941345
+    },
+    "preview_paths": []
+  },
+  "34": {
+    "count": 21,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0004545.jpg",
+      "bbox": [
+        693,
+        436,
+        767,
+        528
+      ],
+      "det_score": 0.908296525478363
+    },
+    "preview_paths": []
+  },
+  "35": {
+    "count": 10,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0000181.jpg",
+      "bbox": [
+        708,
+        519,
+        777,
+        611
+      ],
+      "det_score": 0.8821092844009399
+    },
+    "preview_paths": []
+  },
+  "36": {
+    "count": 22,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0005743.jpg",
+      "bbox": [
+        643,
+        264,
+        832,
+        504
+      ],
+      "det_score": 0.9077249765396118
+    },
+    "preview_paths": []
+  },
+  "37": {
+    "count": 9,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0001322.jpg",
+      "bbox": [
+        1345,
+        301,
+        1434,
+        404
+      ],
+      "det_score": 0.8958820700645447
+    },
+    "preview_paths": []
+  },
+  "38": {
+    "count": 10,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0001785.jpg",
+      "bbox": [
+        960,
+        280,
+        1147,
+        482
+      ],
+      "det_score": 0.9090386033058167
+    },
+    "preview_paths": []
+  },
+  "39": {
+    "count": 12,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0007296.jpg",
+      "bbox": [
+        636,
+        672,
+        712,
+        759
+      ],
+      "det_score": 0.8940499424934387
+    },
+    "preview_paths": []
+  },
+  "40": {
+    "count": 162,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0000993.jpg",
+      "bbox": [
+        1005,
+        342,
+        1084,
+        440
+      ],
+      "det_score": 0.9257165193557739
+    },
+    "preview_paths": []
+  },
+  "41": {
+    "count": 29,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0002524.jpg",
+      "bbox": [
+        107,
+        453,
+        283,
+        698
+      ],
+      "det_score": 0.9071088433265686
+    },
+    "preview_paths": []
+  },
+  "42": {
+    "count": 10,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0011240.jpg",
+      "bbox": [
+        1372,
+        357,
+        1464,
+        470
+      ],
+      "det_score": 0.9211017489433289
+    },
+    "preview_paths": []
+  },
+  "43": {
+    "count": 61,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0005834.jpg",
+      "bbox": [
+        755,
+        387,
+        835,
+        482
+      ],
+      "det_score": 0.8933379054069519
+    },
+    "preview_paths": []
+  },
+  "44": {
+    "count": 12,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0008061.jpg",
+      "bbox": [
+        433,
+        432,
+        510,
+        533
+      ],
+      "det_score": 0.9174932837486267
+    },
+    "preview_paths": []
+  },
+  "45": {
+    "count": 26,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0004060.jpg",
+      "bbox": [
+        719,
+        314,
+        803,
+        416
+      ],
+      "det_score": 0.8987398147583008
+    },
+    "preview_paths": []
+  },
+  "46": {
+    "count": 12,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0000778.jpg",
+      "bbox": [
+        668,
+        395,
+        743,
+        485
+      ],
+      "det_score": 0.8935679793357849
+    },
+    "preview_paths": []
+  },
+  "47": {
+    "count": 24,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0008416.jpg",
+      "bbox": [
+        1540,
+        151,
+        1741,
+        397
+      ],
+      "det_score": 0.9091278314590454
+    },
+    "preview_paths": []
+  },
+  "48": {
+    "count": 14,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0008048.jpg",
+      "bbox": [
+        907,
+        456,
+        1089,
+        666
+      ],
+      "det_score": 0.9094773530960083
+    },
+    "preview_paths": []
+  },
+  "49": {
+    "count": 37,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0002622.jpg",
+      "bbox": [
+        1494,
+        637,
+        1580,
+        740
+      ],
+      "det_score": 0.8952844142913818
+    },
+    "preview_paths": []
+  },
+  "50": {
+    "count": 13,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0007046.jpg",
+      "bbox": [
+        684,
+        399,
+        843,
+        579
+      ],
+      "det_score": 0.8795875310897827
+    },
+    "preview_paths": []
+  },
+  "51": {
+    "count": 19,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0006763.jpg",
+      "bbox": [
+        353,
+        363,
+        523,
+        578
+      ],
+      "det_score": 0.8951711654663086
+    },
+    "preview_paths": []
+  },
+  "52": {
+    "count": 72,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0004523.jpg",
+      "bbox": [
+        762,
+        314,
+        850,
+        421
+      ],
+      "det_score": 0.9086047410964966
+    },
+    "preview_paths": []
+  },
+  "53": {
+    "count": 61,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0006983.jpg",
+      "bbox": [
+        925,
+        162,
+        1035,
+        297
+      ],
+      "det_score": 0.9129763841629028
+    },
+    "preview_paths": []
+  },
+  "54": {
+    "count": 18,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0007231.jpg",
+      "bbox": [
+        693,
+        173,
+        791,
+        311
+      ],
+      "det_score": 0.9005818367004395
+    },
+    "preview_paths": []
+  },
+  "55": {
+    "count": 26,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0004146.jpg",
+      "bbox": [
+        1145,
+        287,
+        1343,
+        541
+      ],
+      "det_score": 0.9024990797042847
+    },
+    "preview_paths": []
+  },
+  "56": {
+    "count": 54,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0001365.jpg",
+      "bbox": [
+        886,
+        263,
+        1058,
+        493
+      ],
+      "det_score": 0.8948778510093689
+    },
+    "preview_paths": []
+  },
+  "57": {
+    "count": 22,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0000140.jpg",
+      "bbox": [
+        1632,
+        215,
+        1720,
+        325
+      ],
+      "det_score": 0.8840911984443665
+    },
+    "preview_paths": []
+  },
+  "58": {
+    "count": 58,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0003328.jpg",
+      "bbox": [
+        833,
+        252,
+        1019,
+        500
+      ],
+      "det_score": 0.9219024777412415
+    },
+    "preview_paths": []
+  },
+  "59": {
+    "count": 85,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0004549.jpg",
+      "bbox": [
+        1033,
+        300,
+        1122,
+        415
+      ],
+      "det_score": 0.9194445013999939
+    },
+    "preview_paths": []
+  },
+  "60": {
+    "count": 67,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0004942.jpg",
+      "bbox": [
+        544,
+        338,
+        622,
+        440
+      ],
+      "det_score": 0.9152268767356873
+    },
+    "preview_paths": []
+  },
+  "61": {
+    "count": 117,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0008241.jpg",
+      "bbox": [
+        805,
+        234,
+        1100,
+        609
+      ],
+      "det_score": 0.9046276807785034
+    },
+    "preview_paths": []
+  },
+  "62": {
+    "count": 23,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0002074.jpg",
+      "bbox": [
+        1167,
+        178,
+        1237,
+        271
+      ],
+      "det_score": 0.9070296883583069
+    },
+    "preview_paths": []
+  },
+  "63": {
+    "count": 27,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0003933.jpg",
+      "bbox": [
+        647,
+        137,
+        750,
+        261
+      ],
+      "det_score": 0.8991885185241699
+    },
+    "preview_paths": []
+  },
+  "64": {
+    "count": 52,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0005072.jpg",
+      "bbox": [
+        920,
+        260,
+        1015,
+        378
+      ],
+      "det_score": 0.9143030643463135
+    },
+    "preview_paths": []
+  },
+  "65": {
+    "count": 23,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0000871.jpg",
+      "bbox": [
+        1185,
+        333,
+        1377,
+        575
+      ],
+      "det_score": 0.8942360877990723
+    },
+    "preview_paths": []
+  },
+  "66": {
+    "count": 22,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0006490.jpg",
+      "bbox": [
+        1125,
+        192,
+        1194,
+        283
+      ],
+      "det_score": 0.91936194896698
+    },
+    "preview_paths": []
+  },
+  "67": {
+    "count": 108,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0008422.jpg",
+      "bbox": [
+        705,
+        227,
+        810,
+        366
+      ],
+      "det_score": 0.9006630182266235
+    },
+    "preview_paths": []
+  },
+  "68": {
+    "count": 11,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0007378.jpg",
+      "bbox": [
+        1704,
+        729,
+        1777,
+        818
+      ],
+      "det_score": 0.8801703453063965
+    },
+    "preview_paths": []
+  },
+  "69": {
+    "count": 35,
+    "movies": [
+      "SIEULAYGAPSIEULUA"
+    ],
+    "movie_ids": [
+      5
+    ],
+    "rep_image": {
+      "movie": "SIEULAYGAPSIEULUA",
+      "frame": "frame_0000816.jpg",
+      "bbox": [
+        709,
+        415,
+        887,
+        665
+      ],
+      "det_score": 0.8924168944358826
+    },
+    "preview_paths": []
+  },
+  "70": {
+    "count": 21,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0006403.jpg",
+      "bbox": [
+        992,
+        430,
+        1072,
+        520
+      ],
+      "det_score": 0.9155994057655334
+    },
+    "preview_paths": []
+  },
+  "71": {
+    "count": 18,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0000296.jpg",
+      "bbox": [
+        433,
+        228,
+        548,
+        370
+      ],
+      "det_score": 0.9054584503173828
+    },
+    "preview_paths": []
+  },
+  "72": {
+    "count": 15,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0002145.jpg",
+      "bbox": [
+        570,
+        147,
+        667,
+        256
+      ],
+      "det_score": 0.8980882167816162
+    },
+    "preview_paths": []
+  },
+  "73": {
+    "count": 14,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0000294.jpg",
+      "bbox": [
+        322,
+        180,
+        395,
+        265
+      ],
+      "det_score": 0.9254279136657715
+    },
+    "preview_paths": []
+  },
+  "74": {
+    "count": 19,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0001222.jpg",
+      "bbox": [
+        868,
+        397,
+        956,
+        520
+      ],
+      "det_score": 0.9003975987434387
+    },
+    "preview_paths": []
+  },
+  "75": {
+    "count": 12,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0007378.jpg",
+      "bbox": [
+        950,
+        635,
+        1027,
+        720
+      ],
+      "det_score": 0.9062798619270325
+    },
+    "preview_paths": []
+  },
+  "76": {
+    "count": 45,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0003121.jpg",
+      "bbox": [
+        807,
+        281,
+        952,
+        465
+      ],
+      "det_score": 0.8919610381126404
+    },
+    "preview_paths": []
+  },
+  "77": {
+    "count": 34,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0002742.jpg",
+      "bbox": [
+        887,
+        204,
+        972,
+        327
+      ],
+      "det_score": 0.9024443030357361
+    },
+    "preview_paths": []
+  },
+  "78": {
+    "count": 30,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0013508.jpg",
+      "bbox": [
+        759,
+        168,
+        810,
+        227
+      ],
+      "det_score": 0.8945074677467346
+    },
+    "preview_paths": []
+  },
+  "79": {
+    "count": 34,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0003783.jpg",
+      "bbox": [
+        671,
+        311,
+        751,
+        413
+      ],
+      "det_score": 0.9014603495597839
+    },
+    "preview_paths": []
+  },
+  "80": {
+    "count": 30,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0005499.jpg",
+      "bbox": [
+        323,
+        189,
+        437,
+        330
+      ],
+      "det_score": 0.8851167559623718
+    },
+    "preview_paths": []
+  },
+  "81": {
+    "count": 35,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0001220.jpg",
+      "bbox": [
+        941,
+        461,
+        1045,
+        592
+      ],
+      "det_score": 0.9210841655731201
+    },
+    "preview_paths": []
+  },
+  "82": {
+    "count": 13,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0000836.jpg",
+      "bbox": [
+        406,
+        335,
+        497,
+        451
+      ],
+      "det_score": 0.9082615375518799
+    },
+    "preview_paths": []
+  },
+  "83": {
+    "count": 234,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0004521.jpg",
+      "bbox": [
+        557,
+        284,
+        644,
+        401
+      ],
+      "det_score": 0.9112118482589722
+    },
+    "preview_paths": []
+  },
+  "84": {
+    "count": 18,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0002011.jpg",
+      "bbox": [
+        740,
+        379,
+        817,
+        486
+      ],
+      "det_score": 0.9189635515213013
+    },
+    "preview_paths": []
+  },
+  "85": {
+    "count": 60,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0003519.jpg",
+      "bbox": [
+        1262,
+        265,
+        1444,
+        525
+      ],
+      "det_score": 0.9096276760101318
+    },
+    "preview_paths": []
+  },
+  "86": {
+    "count": 88,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0003725.jpg",
+      "bbox": [
+        1409,
+        439,
+        1616,
+        714
+      ],
+      "det_score": 0.9114094376564026
+    },
+    "preview_paths": []
+  },
+  "87": {
+    "count": 69,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0007050.jpg",
+      "bbox": [
+        477,
+        347,
+        571,
+        470
+      ],
+      "det_score": 0.9207618236541748
+    },
+    "preview_paths": []
+  },
+  "88": {
+    "count": 16,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0002828.jpg",
+      "bbox": [
+        97,
+        393,
+        168,
+        484
+      ],
+      "det_score": 0.908160924911499
+    },
+    "preview_paths": []
+  },
+  "89": {
+    "count": 13,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0001972.jpg",
+      "bbox": [
+        1092,
+        199,
+        1369,
+        576
+      ],
+      "det_score": 0.8728088736534119
+    },
+    "preview_paths": []
+  },
+  "90": {
+    "count": 18,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0006401.jpg",
+      "bbox": [
+        549,
+        170,
+        623,
+        260
+      ],
+      "det_score": 0.9149054288864136
+    },
+    "preview_paths": []
+  },
+  "91": {
+    "count": 10,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0007377.jpg",
+      "bbox": [
+        1832,
+        712,
+        1913,
+        803
+      ],
+      "det_score": 0.9047459363937378
+    },
+    "preview_paths": []
+  },
+  "92": {
+    "count": 44,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0013568.jpg",
+      "bbox": [
+        431,
+        363,
+        488,
+        437
+      ],
+      "det_score": 0.8994849920272827
+    },
+    "preview_paths": []
+  },
+  "93": {
+    "count": 75,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0013576.jpg",
+      "bbox": [
+        672,
+        217,
+        797,
+        365
+      ],
+      "det_score": 0.9082527756690979
+    },
+    "preview_paths": []
+  },
+  "94": {
+    "count": 10,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0006153.jpg",
+      "bbox": [
+        1218,
+        233,
+        1288,
+        328
+      ],
+      "det_score": 0.8962540626525879
+    },
+    "preview_paths": []
+  },
+  "95": {
+    "count": 19,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0000291.jpg",
+      "bbox": [
+        48,
+        115,
+        111,
+        201
+      ],
+      "det_score": 0.8868216276168823
+    },
+    "preview_paths": []
+  },
+  "96": {
+    "count": 18,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0012114.jpg",
+      "bbox": [
+        136,
+        455,
+        289,
+        704
+      ],
+      "det_score": 0.8419908285140991
+    },
+    "preview_paths": []
+  },
+  "97": {
+    "count": 30,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0005567.jpg",
+      "bbox": [
+        720,
+        544,
+        800,
+        630
+      ],
+      "det_score": 0.8909590244293213
+    },
+    "preview_paths": []
+  },
+  "98": {
+    "count": 118,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0003672.jpg",
+      "bbox": [
+        1278,
+        272,
+        1379,
+        393
+      ],
+      "det_score": 0.9263652563095093
+    },
+    "preview_paths": []
+  },
+  "99": {
+    "count": 25,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0006336.jpg",
+      "bbox": [
+        1143,
+        465,
+        1218,
+        554
+      ],
+      "det_score": 0.8974128365516663
+    },
+    "preview_paths": []
+  },
+  "100": {
+    "count": 11,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0002265.jpg",
+      "bbox": [
+        671,
+        151,
+        730,
+        227
+      ],
+      "det_score": 0.8658989071846008
+    },
+    "preview_paths": []
+  },
+  "101": {
+    "count": 32,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0003099.jpg",
+      "bbox": [
+        1010,
+        249,
+        1219,
+        525
+      ],
+      "det_score": 0.8986794948577881
+    },
+    "preview_paths": []
+  },
+  "102": {
+    "count": 119,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0006718.jpg",
+      "bbox": [
+        661,
+        171,
+        789,
+        339
+      ],
+      "det_score": 0.8949161767959595
+    },
+    "preview_paths": []
+  },
+  "103": {
+    "count": 20,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0008041.jpg",
+      "bbox": [
+        429,
+        378,
+        500,
+        469
+      ],
+      "det_score": 0.9132087826728821
+    },
+    "preview_paths": []
+  },
+  "104": {
+    "count": 86,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0006998.jpg",
+      "bbox": [
+        411,
+        175,
+        544,
+        343
+      ],
+      "det_score": 0.8997441530227661
+    },
+    "preview_paths": []
+  },
+  "105": {
+    "count": 31,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0001337.jpg",
+      "bbox": [
+        454,
+        318,
+        540,
+        413
+      ],
+      "det_score": 0.8930268883705139
+    },
+    "preview_paths": []
+  },
+  "106": {
+    "count": 22,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0006134.jpg",
+      "bbox": [
+        774,
+        231,
+        854,
+        335
+      ],
+      "det_score": 0.9028790593147278
+    },
+    "preview_paths": []
+  },
+  "107": {
+    "count": 39,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0003366.jpg",
+      "bbox": [
+        781,
+        200,
+        837,
+        259
+      ],
+      "det_score": 0.9111828207969666
+    },
+    "preview_paths": []
+  },
+  "108": {
+    "count": 29,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0001804.jpg",
+      "bbox": [
+        456,
+        242,
+        564,
+        379
+      ],
+      "det_score": 0.8522452116012573
+    },
+    "preview_paths": []
+  },
+  "109": {
+    "count": 33,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0003360.jpg",
+      "bbox": [
+        217,
+        269,
+        270,
+        329
+      ],
+      "det_score": 0.8865336179733276
+    },
+    "preview_paths": []
+  },
+  "110": {
+    "count": 29,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0001929.jpg",
+      "bbox": [
+        460,
+        204,
+        518,
+        282
+      ],
+      "det_score": 0.896769106388092
+    },
+    "preview_paths": []
+  },
+  "111": {
+    "count": 52,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0003917.jpg",
+      "bbox": [
+        679,
+        198,
+        726,
+        257
+      ],
+      "det_score": 0.9153165221214294
+    },
+    "preview_paths": []
+  },
+  "112": {
+    "count": 18,
+    "movies": [
+      "KEANDANH"
+    ],
+    "movie_ids": [
+      3
+    ],
+    "rep_image": {
+      "movie": "KEANDANH",
+      "frame": "frame_0001080.jpg",
+      "bbox": [
+        823,
+        287,
+        914,
+        399
+      ],
+      "det_score": 0.8603001832962036
+    },
+    "preview_paths": []
+  },
+  "113": {
+    "count": 17,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0000294.jpg",
+      "bbox": [
+        831,
+        159,
+        947,
+        296
+      ],
+      "det_score": 0.9225441217422485
+    },
+    "preview_paths": []
+  },
+  "114": {
+    "count": 47,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0004593.jpg",
+      "bbox": [
+        942,
+        155,
+        1029,
+        263
+      ],
+      "det_score": 0.908047080039978
+    },
+    "preview_paths": []
+  },
+  "115": {
+    "count": 55,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0009354.jpg",
+      "bbox": [
+        422,
+        178,
+        554,
+        320
+      ],
+      "det_score": 0.9198093414306641
+    },
+    "preview_paths": []
+  },
+  "116": {
+    "count": 11,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0011447.jpg",
+      "bbox": [
+        741,
+        360,
+        825,
+        460
+      ],
+      "det_score": 0.8016024231910706
+    },
+    "preview_paths": []
+  },
+  "117": {
+    "count": 189,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0001207.jpg",
+      "bbox": [
+        760,
+        259,
+        929,
+        494
+      ],
+      "det_score": 0.9212818145751953
+    },
+    "preview_paths": []
+  },
+  "118": {
+    "count": 49,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0000144.jpg",
+      "bbox": [
+        598,
+        244,
+        682,
+        346
+      ],
+      "det_score": 0.8883225321769714
+    },
+    "preview_paths": []
+  },
+  "119": {
+    "count": 186,
+    "movies": [
+      "NGUOIVOCUOICUNG"
+    ],
+    "movie_ids": [
+      0
+    ],
+    "rep_image": {
+      "movie": "NGUOIVOCUOICUNG",
+      "frame": "frame_0007166.jpg",
+      "bbox": [
+        666,
+        144,
+        716,
+        212
+      ],
+      "det_score": 0.9101603031158447
+    },
+    "preview_paths": []
+  },
+  "120": {
+    "count": 22,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0002833.jpg",
+      "bbox": [
+        1025,
+        253,
+        1111,
+        376
+      ],
+      "det_score": 0.9111478328704834
+    },
+    "preview_paths": []
+  },
+  "121": {
+    "count": 24,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0002620.jpg",
+      "bbox": [
+        1156,
+        101,
+        1297,
+        277
+      ],
+      "det_score": 0.8373440504074097
+    },
+    "preview_paths": []
+  },
+  "122": {
+    "count": 22,
+    "movies": [
+      "DENAMHON"
+    ],
+    "movie_ids": [
+      4
+    ],
+    "rep_image": {
+      "movie": "DENAMHON",
+      "frame": "frame_0001204.jpg",
+      "bbox": [
+        1076,
+        390,
+        1141,
+        478
+      ],
+      "det_score": 0.8753058910369873
+    },
+    "preview_paths": []
+  },
+  "123": {
+    "count": 35,
+    "movies": [
+      "GAIGIALAMCHIEU"
+    ],
+    "movie_ids": [
+      1
+    ],
+    "rep_image": {
+      "movie": "GAIGIALAMCHIEU",
+      "frame": "frame_0001730.jpg",
+      "bbox": [
+        1014,
+        246,
+        1172,
+        435
+      ],
+      "det_score": 0.9206090569496155
+    },
+    "preview_paths": []
+  },
+  "124": {
+    "count": 45,
+    "movies": [
+      "EMCHUA18"
+    ],
+    "movie_ids": [
+      2
+    ],
+    "rep_image": {
+      "movie": "EMCHUA18",
+      "frame": "frame_0002087.jpg",
+      "bbox": [
+        814,
+        137,
+        936,
+        310
+      ],
+      "det_score": 0.865362823009491
+    },
+    "preview_paths": []
+  }
+}
